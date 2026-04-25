@@ -1,2 +1,0 @@
--- liquibase formatted sql
--- logicalFilePath: db/changelog/common/2026/04/V001__example_changelog.sql
