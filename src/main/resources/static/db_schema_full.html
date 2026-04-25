@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DB Schema — Data Analytics Mate</title>
+<style>
+  body { font-family: sans-serif; padding: 24px; background: #fff; color: #2c2c2a; }
+  h1 { font-size: 25px; font-weight: 500; margin-bottom: 25px; }
+  #erd { width: 100%; overflow-x: auto; }
+  .desc-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 20px; }
+  .desc-table th { text-align: left; padding: 18px 27px; font-weight: 500; border-bottom: 2px solid #ccc; }
+  .desc-table td { padding: 18px 27px; vertical-align: top; border-bottom: 1px solid #eee; }
+  .desc-table td:first-child { font-weight: 500; white-space: nowrap; font-family: monospace; font-size: 20px; }
+  .tag { display: inline-block; font-size: 20px; padding: 3px 13px; border-radius: 6px; margin-left: 6px; font-family: monospace; }
+  .tag-session { background: #E6F1FB; color: #0C447C; }
+  .tag-account { background: #E1F5EE; color: #085041; }
+  .tag-email   { background: #FAEEDA; color: #633806; }
+  .tag-other   { background: #F1EFE8; color: #444441; }
+
+  #erd svg .edgeLabel {
+    font-size: 52px !important;
+  }
+  #erd svg .edgeLabel foreignObject {
+    width: 600px !important;
+    height: 120px !important;
+    overflow: visible !important;
+  }
+  #erd svg .edgeLabel .label {
+    font-size: 52px !important;
+    white-space: nowrap !important;
+  }
+  #erd svg marker {
+    overflow: visible;
+  }
+</style>
+</head>
+<body>
+<h1>DB Schema — Data Analytics Mate</h1>
+<div id="erd"></div>
+
+<table class="desc-table">
+  <thead>
+    <tr><th>Таблиця</th><th>Опис</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>sessions <span class="tag tag-session">сесії</span></td><td>Головна таблиця. Кожен візит користувача = одна сесія з унікальним ga_session_id.</td></tr>
+    <tr><td>session_params <span class="tag tag-session">сесії</span></td><td>Деталі сесії: пристрій, країна, браузер, канал трафіку.</td></tr>
+    <tr><td>event_params <span class="tag tag-session">сесії</span></td><td>Всі дії користувача під час сесії.</td></tr>
+    <tr><td>ab_test <span class="tag tag-session">сесії</span></td><td>В які A/B тести потрапила сесія.</td></tr>
+    <tr><td>account <span class="tag tag-account">підписники</span></td><td>Підписники які залишили email.</td></tr>
+    <tr><td>account_session <span class="tag tag-account">підписники</span></td><td>Зв'язкова таблиця між account і sessions.</td></tr>
+    <tr><td>email_sent <span class="tag tag-email">email</span></td><td>Всі надіслані листи.</td></tr>
+    <tr><td>email_open <span class="tag tag-email">email</span></td><td>Кожне відкриття листа.</td></tr>
+    <tr><td>email_visit <span class="tag tag-email">email</span></td><td>Кожен клік в листі.</td></tr>
+    <tr><td>orders <span class="tag tag-other">покупки</span></td><td>Покупки. Через item_id приєднується до product.</td></tr>
+    <tr><td>product <span class="tag tag-other">покупки</span></td><td>Довідник товарів.</td></tr>
+    <tr><td>revenue_predict <span class="tag tag-other">фінанси</span></td><td>План доходу компанії.</td></tr>
+    <tr><td>paid_search_cost <span class="tag tag-other">фінанси</span></td><td>Витрати на платний трафік.</td></tr>
+  </tbody>
+</table>
+
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+await document.fonts.ready;
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  fontFamily: 'sans-serif',
+  themeVariables: {
+    fontSize: '80px',
+    fontFamily: 'sans-serif',
+    lineColor: '#73726c',
+    textColor: '#3d3d3a',
+  },
+});
+
+const diagram = `erDiagram
+  sessions ||--o{ event_params : "1 to many"
+  sessions ||--o{ orders : "1 to many"
+  sessions ||--|| session_params : "1 to 1"
+  sessions ||--o{ ab_test : "1 to many"
+  sessions ||--o{ account_session : "1 to many"
+  account ||--o{ account_session : "1 to many"
+  account ||--o{ email_sent : "1 to many"
+  account ||--o{ email_open : "1 to many"
+  account ||--o{ email_visit : "1 to many"
+  email_sent ||--o{ email_open : "1 to many"
+  email_sent ||--o{ email_visit : "1 to many"
+  orders }o--|| product : "many to 1"
+
+  sessions {
+    INTEGER ga_session_id PK
+    DATE date
+  }
+  event_params {
+    DATE event_date
+    INTEGER ga_session_id FK
+    INTEGER event_timestamp
+    VARCHAR(255) event_name
+    JSONB event_params
+  }
+  session_params {
+    INTEGER ga_session_id FK
+    VARCHAR(255) device
+    VARCHAR(255) mobile_model_name
+    VARCHAR(255) operating_system
+    VARCHAR(255) language
+    VARCHAR(255) browser
+    VARCHAR(255) continent
+    VARCHAR(255) country
+    VARCHAR(255) medium
+    VARCHAR(255) name
+    VARCHAR(255) channel
+  }
+  ab_test {
+    INTEGER ga_session_id FK
+    INTEGER test
+    INTEGER test_group
+  }
+  account_session {
+    INTEGER account_id FK
+    INTEGER ga_session_id FK
+  }
+  account {
+    INTEGER id PK
+    INTEGER send_interval
+    INTEGER is_verified
+    INTEGER is_unsubscribed
+  }
+  email_sent {
+    INTEGER sent_date
+    INTEGER letter_type
+    VARCHAR(255) id_message
+    INTEGER id_account FK
+  }
+  email_open {
+    INTEGER open_date
+    INTEGER letter_type
+    VARCHAR(255) id_message
+    INTEGER id_account FK
+  }
+  email_visit {
+    INTEGER visit_date
+    INTEGER letter_type
+    VARCHAR(255) id_message
+    INTEGER id_account FK
+  }
+  orders {
+    BIGINT id PK
+    INTEGER ga_session_id FK
+    INTEGER item_id FK
+  }
+  product {
+    INTEGER item_id PK
+    VARCHAR(255) name
+    VARCHAR(100) category
+    DECIMAL(10,2) price
+    TEXT short_description
+  }
+  revenue_predict {
+    DATE date PK
+    DECIMAL(10,2) predict
+  }
+  paid_search_cost {
+    DATE date PK
+    DECIMAL(10,2) cost
+  }
+`;
+const { svg } = await mermaid.render('erd-svg', diagram);
+document.getElementById('erd').innerHTML = svg;
+
+document.querySelectorAll('#erd svg .node').forEach(node => {
+  const firstPath = node.querySelector('path[d]');
+  if (!firstPath) return;
+  const d = firstPath.getAttribute('d');
+  const nums = d.match(/-?[\d.]+/g)?.map(Number);
+  if (!nums || nums.length < 8) return;
+  const xs = [nums[0], nums[2], nums[4], nums[6]];
+  const ys = [nums[1], nums[3], nums[5], nums[7]];
+  const x = Math.min(...xs), y = Math.min(...ys);
+  const w = Math.max(...xs) - x, h = Math.max(...ys) - y;
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect.setAttribute('x', x); rect.setAttribute('y', y);
+  rect.setAttribute('width', w); rect.setAttribute('height', h);
+  rect.setAttribute('rx', '8');
+  for (const a of ['fill', 'stroke', 'stroke-width', 'class', 'style']) {
+    if (firstPath.hasAttribute(a)) rect.setAttribute(a, firstPath.getAttribute(a));
+  }
+  firstPath.replaceWith(rect);
+});
+
+document.querySelectorAll('#erd svg .row-rect-odd path, #erd svg .row-rect-even path').forEach(p => {
+  p.setAttribute('stroke', 'none');
+});
+
+const svgEl = document.querySelector('#erd svg');
+if (svgEl) {
+  const SCALE = 5;
+  svgEl.querySelectorAll('defs marker').forEach(marker => {
+    const mw = parseFloat(marker.getAttribute('markerWidth') || '12');
+    const mh = parseFloat(marker.getAttribute('markerHeight') || '12');
+    marker.setAttribute('markerWidth',  mw  * SCALE);
+    marker.setAttribute('markerHeight', mh  * SCALE);
+    const inner = marker.querySelector('path, line, polyline, polygon');
+    if (inner) {
+      const cur = inner.getAttribute('transform') || '';
+      inner.setAttribute('transform', cur + ` scale(${SCALE})`);
+      const rx = parseFloat(marker.getAttribute('refX') || '0');
+      const ry = parseFloat(marker.getAttribute('refY') || '0');
+      marker.setAttribute('refX', rx * SCALE);
+      marker.setAttribute('refY', ry * SCALE);
+    }
+  });
+  svgEl.querySelectorAll('.edges path, .edge path').forEach(p => {
+    p.setAttribute('stroke-width', '4');
+  });
+}
+</script>
+</body>
+</html>
