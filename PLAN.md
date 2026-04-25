@@ -11,8 +11,8 @@
 ### 1) product ✅
 - Entity: product → Migration: product → Repository: ProductRepository → COMMIT ✅
 
-### 2) account ❌
-- Entity: account → Migration: account → Repository: AccountRepository → COMMIT
+### 2) account ✅
+- Entity: account → Migration: account → Repository: AccountRepository → COMMIT ✅
 
 ### 3) "session" ❌
 - Entity: "session" → Migration: "session" → Repository: SessionRepository → COMMIT
