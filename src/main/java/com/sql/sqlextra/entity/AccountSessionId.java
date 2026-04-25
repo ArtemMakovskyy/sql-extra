@@ -19,7 +19,7 @@ import java.io.Serializable;
 public class AccountSessionId implements Serializable {
 
     @Column(name = "account_id")
-    private Long accountId;
+    private Integer accountId;
 
     @Column(name = "ga_session_id")
     private String gaSessionId;

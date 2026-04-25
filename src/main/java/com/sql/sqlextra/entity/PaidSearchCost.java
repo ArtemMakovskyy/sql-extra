@@ -16,10 +16,8 @@ import java.time.LocalDate;
 public class PaidSearchCost {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private LocalDate date;
 
+    @Column(nullable = false)
     private BigDecimal cost;
 }

@@ -17,7 +17,7 @@ public class EmailSent {
     private Long id;
 
     @Column(name = "id_account", nullable = false)
-    private Long idAccount;
+    private Integer idAccount;
 
     @Column(name = "sent_date")
     private Integer sentDate;

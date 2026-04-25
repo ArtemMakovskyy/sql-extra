@@ -17,7 +17,7 @@ public class EmailOpen {
     private Long id;
 
     @Column(name = "id_account", nullable = false)
-    private Long idAccount;
+    private Integer idAccount;
 
     @Column(name = "open_date")
     private Integer openDate;

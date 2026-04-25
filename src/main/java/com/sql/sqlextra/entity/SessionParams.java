@@ -13,10 +13,7 @@ import lombok.Setter;
 public class SessionParams {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "ga_session_id", nullable = false, unique = true)
+    @Column(name = "ga_session_id")
     private String gaSessionId;
 
     private String device;

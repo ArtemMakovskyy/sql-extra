@@ -4,6 +4,8 @@ import com.sql.sqlextra.entity.PaidSearchCost;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+
 @Repository
-public interface PaidSearchCostRepository extends JpaRepository<PaidSearchCost, Long> {
+public interface PaidSearchCostRepository extends JpaRepository<PaidSearchCost, LocalDate> {
 }
