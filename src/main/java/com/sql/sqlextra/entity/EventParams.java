@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,6 +33,7 @@ public class EventParams {
     @Column(name = "event_name")
     private String eventName;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "event_params", columnDefinition = "jsonb")
     private String eventParams;
 }

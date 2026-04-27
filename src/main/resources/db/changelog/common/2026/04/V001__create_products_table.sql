@@ -2,7 +2,7 @@
 -- logicalFilePath: db/changelog/common/2026/04/V001__create_products_table.sql
 
 -- changeset author:1
-CREATE TABLE product (
+CREATE TABLE products (
     item_id INTEGER PRIMARY KEY,
     name VARCHAR(255),
     category VARCHAR(100),
@@ -11,4 +11,4 @@ CREATE TABLE product (
 );
 
 -- changeset author:2
-CREATE INDEX idx_products_category ON product(category);
+CREATE INDEX idx_products_category ON products(category);

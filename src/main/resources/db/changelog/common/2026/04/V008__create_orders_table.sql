@@ -14,7 +14,7 @@ ALTER TABLE orders ADD CONSTRAINT fk_orders_session
 
 -- changeset author:3
 ALTER TABLE orders ADD CONSTRAINT fk_orders_product
-    FOREIGN KEY (item_id) REFERENCES product(item_id);
+    FOREIGN KEY (item_id) REFERENCES products(item_id);
 
 -- changeset author:4
 CREATE INDEX idx_orders_ga_session_id ON orders(ga_session_id);

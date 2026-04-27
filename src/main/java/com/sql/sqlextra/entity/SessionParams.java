@@ -24,6 +24,7 @@ public class SessionParams {
     @Column(name = "operating_system")
     private String operatingSystem;
 
+    @Column(length = 50)
     private String language;
 
     private String browser;

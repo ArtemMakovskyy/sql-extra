@@ -8,7 +8,7 @@ CREATE TABLE session_params (
     device VARCHAR(50),
     mobile_model_name VARCHAR(100),
     operating_system VARCHAR(50),
-    language VARCHAR(10),
+    language VARCHAR(50),
     browser VARCHAR(50),
     continent VARCHAR(20),
     country VARCHAR(50),
