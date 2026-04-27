@@ -1,0 +1,35 @@
+@base_url = http://localhost:8080
+
+### Get All AB Tests
+GET {{base_url}}/api/ab-tests
+
+### Get AB Test by ID
+GET {{base_url}}/api/ab-tests/1
+
+### Create AB Test
+POST {{base_url}}/api/ab-tests
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "gaSessionId": "ga_abc123",
+  "testName": "button_color",
+  "testVariant": "blue"
+}
+
+### Update AB Test
+PUT {{base_url}}/api/ab-tests/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "gaSessionId": "ga_abc123",
+  "testName": "button_color",
+  "testVariant": "red"
+}
+
+### Delete AB Test
+DELETE {{base_url}}/api/ab-tests/1001
+
+### Get AB Tests by Session ID
+GET {{base_url}}/api/ab-tests/session/ga_abc123

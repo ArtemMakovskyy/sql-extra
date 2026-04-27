@@ -1,0 +1,25 @@
+@base_url = http://localhost:8080
+
+### Get All Account Sessions
+GET {{base_url}}/api/account-sessions
+
+### Get Account Session by ID
+GET {{base_url}}/api/account-sessions/1/ga_abc123
+
+### Create Account Session
+POST {{base_url}}/api/account-sessions
+Content-Type: application/json
+
+{
+  "accountId": 1,
+  "gaSessionId": "ga_test123"
+}
+
+### Delete Account Session
+DELETE {{base_url}}/api/account-sessions/1/ga_test123
+
+### Get Account Sessions by Account ID
+GET {{base_url}}/api/account-sessions/account/1
+
+### Get Account Sessions by Session ID
+GET {{base_url}}/api/account-sessions/session/ga_abc123

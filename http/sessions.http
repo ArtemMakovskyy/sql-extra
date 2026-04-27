@@ -1,0 +1,28 @@
+@base_url = http://localhost:8080
+
+### Get All Sessions
+GET {{base_url}}/api/sessions
+
+### Get Session by ID
+GET {{base_url}}/api/sessions/ga_abc123
+
+### Create Session
+POST {{base_url}}/api/sessions
+Content-Type: application/json
+
+{
+  "gaSessionId": "ga_test123",
+  "date": "2026-01-15"
+}
+
+### Update Session
+PUT {{base_url}}/api/sessions/ga_test123
+Content-Type: application/json
+
+{
+  "gaSessionId": "ga_test123",
+  "date": "2026-01-20"
+}
+
+### Delete Session
+DELETE {{base_url}}/api/sessions/ga_test123

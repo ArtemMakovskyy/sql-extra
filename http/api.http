@@ -1,0 +1,423 @@
+@base_url = http://localhost:8080
+
+### Get All Products
+GET {{base_url}}/api/products
+
+### Get Product by ID
+GET {{base_url}}/api/products/1
+
+### Create Product
+POST {{base_url}}/api/products
+Content-Type: application/json
+
+{
+  "itemId": 1001,
+  "name": "Premium Wine Collection",
+  "category": "wine",
+  "price": 29.99,
+  "shortDescription": "Exclusive wine selection"
+}
+
+### Update Product
+PUT {{base_url}}/api/products/1001
+Content-Type: application/json
+
+{
+  "itemId": 1001,
+  "name": "Premium Wine Collection Updated",
+  "category": "wine",
+  "price": 39.99,
+  "shortDescription": "Updated description"
+}
+
+### Delete Product
+DELETE {{base_url}}/api/products/1001
+
+### Get All Sessions
+GET {{base_url}}/api/sessions
+
+### Get Session by ID
+GET {{base_url}}/api/sessions/ga_abc123
+
+### Create Session
+POST {{base_url}}/api/sessions
+Content-Type: application/json
+
+{
+  "gaSessionId": "ga_test123",
+  "date": "2026-01-15"
+}
+
+### Update Session
+PUT {{base_url}}/api/sessions/ga_test123
+Content-Type: application/json
+
+{
+  "gaSessionId": "ga_test123",
+  "date": "2026-01-20"
+}
+
+### Delete Session
+DELETE {{base_url}}/api/sessions/ga_test123
+
+### Get All Session Params
+GET {{base_url}}/api/session-params
+
+### Get Session Params by ID
+GET {{base_url}}/api/session-params/ga_abc123
+
+### Create Session Params
+POST {{base_url}}/api/session-params
+Content-Type: application/json
+
+{
+  "gaSessionId": "ga_test123",
+  "device": "desktop",
+  "mobileModelName": "iPhone 14",
+  "operatingSystem": "iOS",
+  "language": "en-US",
+  "browser": "Chrome",
+  "continent": "Europe",
+  "country": "United States",
+  "medium": "organic",
+  "name": "direct",
+  "channel": "Organic Search"
+}
+
+### Update Session Params
+PUT {{base_url}}/api/session-params/ga_test123
+Content-Type: application/json
+
+{
+  "gaSessionId": "ga_test123",
+  "device": "mobile",
+  "operatingSystem": "Android",
+  "language": "en-GB",
+  "browser": "Firefox",
+  "continent": "North America",
+  "country": "Canada",
+  "medium": "paid",
+  "name": "referral",
+  "channel": "Paid Search"
+}
+
+### Delete Session Params
+DELETE {{base_url}}/api/session-params/ga_test123
+
+### Get All Accounts
+GET {{base_url}}/api/accounts
+
+### Get Account by ID
+GET {{base_url}}/api/accounts/1
+
+### Create Account
+POST {{base_url}}/api/accounts
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "sendInterval": 14,
+  "isVerified": 1,
+  "isUnsubscribed": 0
+}
+
+### Update Account
+PUT {{base_url}}/api/accounts/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "sendInterval": 7,
+  "isVerified": 1,
+  "isUnsubscribed": 0
+}
+
+### Delete Account
+DELETE {{base_url}}/api/accounts/1001
+
+### Get All Account Sessions
+GET {{base_url}}/api/account-sessions
+
+### Get Account Session by ID
+GET {{base_url}}/api/account-sessions/1/ga_abc123
+
+### Create Account Session
+POST {{base_url}}/api/account-sessions
+Content-Type: application/json
+
+{
+  "accountId": 1,
+  "gaSessionId": "ga_test123"
+}
+
+### Delete Account Session
+DELETE {{base_url}}/api/account-sessions/1/ga_test123
+
+### Get Account Sessions by Account ID
+GET {{base_url}}/api/account-sessions/account/1
+
+### Get Account Sessions by Session ID
+GET {{base_url}}/api/account-sessions/session/ga_abc123
+
+### Get All Orders
+GET {{base_url}}/api/orders
+
+### Get Order by ID
+GET {{base_url}}/api/orders/1
+
+### Create Order
+POST {{base_url}}/api/orders
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "gaSessionId": "ga_abc123",
+  "itemId": 5
+}
+
+### Update Order
+PUT {{base_url}}/api/orders/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "gaSessionId": "ga_abc123",
+  "itemId": 10
+}
+
+### Delete Order
+DELETE {{base_url}}/api/orders/1001
+
+### Get Orders by Session ID
+GET {{base_url}}/api/orders/session/ga_abc123
+
+### Get Orders by Product ID
+GET {{base_url}}/api/orders/product/5
+
+### Get All Event Params
+GET {{base_url}}/api/event-params
+
+### Get Event Params by ID
+GET {{base_url}}/api/event-params/1
+
+### Create Event Params
+POST {{base_url}}/api/event-params
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "gaSessionId": "ga_abc123",
+  "eventDate": "2026-01-15",
+  "eventTimestamp": "2026-01-15T10:30:00",
+  "eventName": "page_view",
+  "eventParams": "{\"page\": \"/home\", \"duration\": 120}"
+}
+
+### Update Event Params
+PUT {{base_url}}/api/event-params/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "gaSessionId": "ga_abc123",
+  "eventDate": "2026-01-20",
+  "eventTimestamp": "2026-01-20T14:00:00",
+  "eventName": "click",
+  "eventParams": "{\"button\": \"submit\"}"
+}
+
+### Delete Event Params
+DELETE {{base_url}}/api/event-params/1001
+
+### Get Event Params by Session ID
+GET {{base_url}}/api/event-params/session/ga_abc123
+
+### Get All AB Tests
+GET {{base_url}}/api/ab-tests
+
+### Get AB Test by ID
+GET {{base_url}}/api/ab-tests/1
+
+### Create AB Test
+POST {{base_url}}/api/ab-tests
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "gaSessionId": "ga_abc123",
+  "testName": "button_color",
+  "testVariant": "blue"
+}
+
+### Update AB Test
+PUT {{base_url}}/api/ab-tests/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "gaSessionId": "ga_abc123",
+  "testName": "button_color",
+  "testVariant": "red"
+}
+
+### Delete AB Test
+DELETE {{base_url}}/api/ab-tests/1001
+
+### Get AB Tests by Session ID
+GET {{base_url}}/api/ab-tests/session/ga_abc123
+
+### Get All Email Sent
+GET {{base_url}}/api/email-sent
+
+### Get Email Sent by ID
+GET {{base_url}}/api/email-sent/1
+
+### Create Email Sent
+POST {{base_url}}/api/email-sent
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "idAccount": 5,
+  "sentDate": "2026-01-15",
+  "sentTimestamp": "2026-01-15T09:00:00"
+}
+
+### Update Email Sent
+PUT {{base_url}}/api/email-sent/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "idAccount": 5,
+  "sentDate": "2026-01-20",
+  "sentTimestamp": "2026-01-20T10:00:00"
+}
+
+### Delete Email Sent
+DELETE {{base_url}}/api/email-sent/1001
+
+### Get Email Sent by Account ID
+GET {{base_url}}/api/email-sent/account/5
+
+### Get All Email Open
+GET {{base_url}}/api/email-open
+
+### Get Email Open by ID
+GET {{base_url}}/api/email-open/1
+
+### Create Email Open
+POST {{base_url}}/api/email-open
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "idAccount": 5,
+  "openDate": "2026-01-15",
+  "openTimestamp": "2026-01-15T10:30:00"
+}
+
+### Update Email Open
+PUT {{base_url}}/api/email-open/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "idAccount": 5,
+  "openDate": "2026-01-20",
+  "openTimestamp": "2026-01-20T11:00:00"
+}
+
+### Delete Email Open
+DELETE {{base_url}}/api/email-open/1001
+
+### Get Email Open by Account ID
+GET {{base_url}}/api/email-open/account/5
+
+### Get All Email Visit
+GET {{base_url}}/api/email-visit
+
+### Get Email Visit by ID
+GET {{base_url}}/api/email-visit/1
+
+### Create Email Visit
+POST {{base_url}}/api/email-visit
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "idAccount": 5,
+  "visitDate": "2026-01-15",
+  "visitTimestamp": "2026-01-15T11:00:00"
+}
+
+### Update Email Visit
+PUT {{base_url}}/api/email-visit/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "idAccount": 5,
+  "visitDate": "2026-01-20",
+  "visitTimestamp": "2026-01-20T12:00:00"
+}
+
+### Delete Email Visit
+DELETE {{base_url}}/api/email-visit/1001
+
+### Get Email Visit by Account ID
+GET {{base_url}}/api/email-visit/account/5
+
+### Get All Paid Search Cost
+GET {{base_url}}/api/paid-search-cost
+
+### Get Paid Search Cost by Date
+GET {{base_url}}/api/paid-search-cost/2026-01-15
+
+### Create Paid Search Cost
+POST {{base_url}}/api/paid-search-cost
+Content-Type: application/json
+
+{
+  "date": "2026-01-15",
+  "cost": 150.50
+}
+
+### Update Paid Search Cost
+PUT {{base_url}}/api/paid-search-cost/2026-01-15
+Content-Type: application/json
+
+{
+  "date": "2026-01-15",
+  "cost": 200.75
+}
+
+### Delete Paid Search Cost
+DELETE {{base_url}}/api/paid-search-cost/2026-01-15
+
+### Get All Revenue Predict
+GET {{base_url}}/api/revenue-predict
+
+### Get Revenue Predict by Date
+GET {{base_url}}/api/revenue-predict/2026-01-15
+
+### Create Revenue Predict
+POST {{base_url}}/api/revenue-predict
+Content-Type: application/json
+
+{
+  "date": "2026-01-15",
+  "predictedRevenue": 5000.00
+}
+
+### Update Revenue Predict
+PUT {{base_url}}/api/revenue-predict/2026-01-15
+Content-Type: application/json
+
+{
+  "date": "2026-01-15",
+  "predictedRevenue": 7500.00
+}
+
+### Delete Revenue Predict
+DELETE {{base_url}}/api/revenue-predict/2026-01-15

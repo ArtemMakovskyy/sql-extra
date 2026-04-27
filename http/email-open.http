@@ -1,0 +1,35 @@
+@base_url = http://localhost:8080
+
+### Get All Email Open
+GET {{base_url}}/api/email-open
+
+### Get Email Open by ID
+GET {{base_url}}/api/email-open/1
+
+### Create Email Open
+POST {{base_url}}/api/email-open
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "idAccount": 5,
+  "openDate": "2026-01-15",
+  "openTimestamp": "2026-01-15T10:30:00"
+}
+
+### Update Email Open
+PUT {{base_url}}/api/email-open/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "idAccount": 5,
+  "openDate": "2026-01-20",
+  "openTimestamp": "2026-01-20T11:00:00"
+}
+
+### Delete Email Open
+DELETE {{base_url}}/api/email-open/1001
+
+### Get Email Open by Account ID
+GET {{base_url}}/api/email-open/account/5

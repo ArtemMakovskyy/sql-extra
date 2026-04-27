@@ -1,0 +1,32 @@
+@base_url = http://localhost:8080
+
+### Get All Accounts
+GET {{base_url}}/api/accounts
+
+### Get Account by ID
+GET {{base_url}}/api/accounts/1
+
+### Create Account
+POST {{base_url}}/api/accounts
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "sendInterval": 14,
+  "isVerified": 1,
+  "isUnsubscribed": 0
+}
+
+### Update Account
+PUT {{base_url}}/api/accounts/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "sendInterval": 7,
+  "isVerified": 1,
+  "isUnsubscribed": 0
+}
+
+### Delete Account
+DELETE {{base_url}}/api/accounts/1001

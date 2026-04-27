@@ -1,0 +1,36 @@
+@base_url = http://localhost:8080
+
+### Get All Orders
+GET {{base_url}}/api/orders
+
+### Get Order by ID
+GET {{base_url}}/api/orders/1
+
+### Create Order
+POST {{base_url}}/api/orders
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "gaSessionId": "ga_abc123",
+  "itemId": 5
+}
+
+### Update Order
+PUT {{base_url}}/api/orders/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "gaSessionId": "ga_abc123",
+  "itemId": 10
+}
+
+### Delete Order
+DELETE {{base_url}}/api/orders/1001
+
+### Get Orders by Session ID
+GET {{base_url}}/api/orders/session/ga_abc123
+
+### Get Orders by Product ID
+GET {{base_url}}/api/orders/product/5

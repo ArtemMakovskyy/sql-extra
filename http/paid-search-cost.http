@@ -1,0 +1,28 @@
+@base_url = http://localhost:8080
+
+### Get All Paid Search Cost
+GET {{base_url}}/api/paid-search-cost
+
+### Get Paid Search Cost by Date
+GET {{base_url}}/api/paid-search-cost/2026-01-15
+
+### Create Paid Search Cost
+POST {{base_url}}/api/paid-search-cost
+Content-Type: application/json
+
+{
+  "date": "2026-01-15",
+  "cost": 150.50
+}
+
+### Update Paid Search Cost
+PUT {{base_url}}/api/paid-search-cost/2026-01-15
+Content-Type: application/json
+
+{
+  "date": "2026-01-15",
+  "cost": 200.75
+}
+
+### Delete Paid Search Cost
+DELETE {{base_url}}/api/paid-search-cost/2026-01-15

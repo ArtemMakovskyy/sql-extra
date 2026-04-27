@@ -1,0 +1,28 @@
+@base_url = http://localhost:8080
+
+### Get All Revenue Predict
+GET {{base_url}}/api/revenue-predict
+
+### Get Revenue Predict by Date
+GET {{base_url}}/api/revenue-predict/2026-01-15
+
+### Create Revenue Predict
+POST {{base_url}}/api/revenue-predict
+Content-Type: application/json
+
+{
+  "date": "2026-01-15",
+  "predictedRevenue": 5000.00
+}
+
+### Update Revenue Predict
+PUT {{base_url}}/api/revenue-predict/2026-01-15
+Content-Type: application/json
+
+{
+  "date": "2026-01-15",
+  "predictedRevenue": 7500.00
+}
+
+### Delete Revenue Predict
+DELETE {{base_url}}/api/revenue-predict/2026-01-15

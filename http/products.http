@@ -1,0 +1,34 @@
+@base_url = http://localhost:8080
+
+### Get All Products
+GET {{base_url}}/api/products
+
+### Get Product by ID
+GET {{base_url}}/api/products/1
+
+### Create Product
+POST {{base_url}}/api/products
+Content-Type: application/json
+
+{
+  "itemId": 1001,
+  "name": "Premium Wine Collection",
+  "category": "wine",
+  "price": 29.99,
+  "shortDescription": "Exclusive wine selection"
+}
+
+### Update Product
+PUT {{base_url}}/api/products/1001
+Content-Type: application/json
+
+{
+  "itemId": 1001,
+  "name": "Premium Wine Collection Updated",
+  "category": "wine",
+  "price": 39.99,
+  "shortDescription": "Updated description"
+}
+
+### Delete Product
+DELETE {{base_url}}/api/products/1001

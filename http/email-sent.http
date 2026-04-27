@@ -1,0 +1,35 @@
+@base_url = http://localhost:8080
+
+### Get All Email Sent
+GET {{base_url}}/api/email-sent
+
+### Get Email Sent by ID
+GET {{base_url}}/api/email-sent/1
+
+### Create Email Sent
+POST {{base_url}}/api/email-sent
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "idAccount": 5,
+  "sentDate": "2026-01-15",
+  "sentTimestamp": "2026-01-15T09:00:00"
+}
+
+### Update Email Sent
+PUT {{base_url}}/api/email-sent/1001
+Content-Type: application/json
+
+{
+  "id": 1001,
+  "idAccount": 5,
+  "sentDate": "2026-01-20",
+  "sentTimestamp": "2026-01-20T10:00:00"
+}
+
+### Delete Email Sent
+DELETE {{base_url}}/api/email-sent/1001
+
+### Get Email Sent by Account ID
+GET {{base_url}}/api/email-sent/account/5
