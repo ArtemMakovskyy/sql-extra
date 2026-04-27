@@ -12,3 +12,11 @@ SELECT s.*, sp.*
 FROM sessions s
 LEFT JOIN session_params sp ON s.ga_session_id = sp.ga_session_id
 WHERE s.ga_session_id = 'ga_abc123';
+
+-- Sessions by Browsers
+SELECT
+    browser,
+    COUNT(ga_session_id) as ssession_cnt
+FROM session_params
+GROUP BY browser
+order by ssession_cnt DESC;

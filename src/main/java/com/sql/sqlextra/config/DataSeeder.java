@@ -75,7 +75,18 @@ public class DataSeeder implements CommandLineRunner {
 
     private List<Product> seedProducts() {
         List<Product> products = new ArrayList<>();
-        String[] categories = {"Electronics", "Furniture", "Clothing", "Books", "Home & Garden", "Sports"};
+        String[] categories = {
+            "Beds", 
+            "Bookcases & shelving units", 
+            "Chairs", 
+            "Tables", 
+            "Sofas",
+            "Electronics",
+            "Furniture",
+            "Clothing",
+            "Books",
+            "Home & Garden"
+        };
 
         for (int i = 1; i <= productsCount; i++) {
             Product product = new Product(
@@ -83,7 +94,7 @@ public class DataSeeder implements CommandLineRunner {
                     faker.commerce().productName(),
                     categories[random.nextInt(categories.length)],
                     new BigDecimal(faker.commerce().price().replace(",", "")),
-                    faker.lorem().sentence(10)
+                    faker.lorem().sentence(10) + (random.nextBoolean() ? " 120x60x80 cm" : "")
             );
             products.add(product);
         }
@@ -110,8 +121,12 @@ public class DataSeeder implements CommandLineRunner {
         String[] devices = {"desktop", "mobile", "tablet"};
         String[] browsers = {"Chrome", "Firefox", "Safari", "Edge"};
         String[] operatingSystems = {"Windows", "macOS", "Linux", "Android", "iOS"};
-        String[] continents = {"Europe", "North America", "Asia", "South America"};
-        String[] countries = {"United States", "United Kingdom", "Germany", "France", "Canada", "Australia", "Japan"};
+        String[] continents = {"Europe", "North America", "Asia", "South America", "Africa", "Oceania"};
+        String[] countries = {
+            "United States", "United Kingdom", "Germany", "France", "Canada", 
+            "Australia", "Japan", "Italy", "Spain", "Netherlands", "Brazil", 
+            "India", "China", "South Korea", "Mexico"
+        };
         String[] mediums = {"organic", "paid", "social", "email", "referral"};
         String[] channels = {"Organic Search", "Paid Search", "Social", "Direct", "Referral"};
 
@@ -121,7 +136,16 @@ public class DataSeeder implements CommandLineRunner {
             params.setDevice(devices[random.nextInt(devices.length)]);
             params.setBrowser(browsers[random.nextInt(browsers.length)]);
             params.setOperatingSystem(operatingSystems[random.nextInt(operatingSystems.length)]);
-            params.setLanguage(faker.nation().language() + "-" + faker.nation().nationality());
+            
+            // Some sessions will have null or empty language
+            if (random.nextInt(10) < 3) {
+                params.setLanguage(null);
+            } else if (random.nextInt(10) < 5) {
+                params.setLanguage(faker.nation().language() + "-" + faker.nation().nationality());
+            } else {
+                params.setLanguage("en-" + faker.address().countryCode());
+            }
+            
             params.setContinent(continents[random.nextInt(continents.length)]);
             params.setCountry(countries[random.nextInt(countries.length)]);
             params.setMedium(mediums[random.nextInt(mediums.length)]);
@@ -138,11 +162,12 @@ public class DataSeeder implements CommandLineRunner {
     private List<Account> seedAccounts() {
         List<Account> accounts = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < accountsCount; i++) {
             Account account = new Account();
             account.setSendInterval(7 + random.nextInt(21));
-            account.setIsVerified(random.nextInt(2));
-            account.setIsUnsubscribed(random.nextInt(2));
+            // About 30% will be unsubscribed, 70% verified
+            account.setIsVerified(random.nextInt(100) < 70 ? 1 : 0);
+            account.setIsUnsubscribed(random.nextInt(100) < 30 ? 1 : 0);
             accounts.add(account);
         }
 
@@ -204,7 +229,7 @@ public class DataSeeder implements CommandLineRunner {
 
     private void seedEventParams(List<Session> sessions) {
         List<EventParams> events = new ArrayList<>();
-        String[] eventNames = {"page_view", "add_to_cart", "remove_from_cart", "checkout", "purchase", "sign_up", "login"};
+        String[] eventNames = {"page_view", "scroll", "add_to_cart", "remove_from_cart", "checkout", "purchase", "sign_up", "login", "user_engagement", "click"};
 
         for (Session session : sessions) {
             int numEvents = random.nextInt(10) + 1;
