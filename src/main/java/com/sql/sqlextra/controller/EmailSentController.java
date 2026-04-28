@@ -1,6 +1,8 @@
 package com.sql.sqlextra.controller;
 
+import com.sql.sqlextra.dto.EmailSentDTO;
 import com.sql.sqlextra.entity.EmailSent;
+import com.sql.sqlextra.mapper.EmailSentMapper;
 import com.sql.sqlextra.service.EmailSentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,30 +16,33 @@ import java.util.List;
 public class EmailSentController {
 
     private final EmailSentService service;
+    private final EmailSentMapper emailSentMapper;
 
     @GetMapping
-    public List<EmailSent> findAll() {
-        return service.findAll();
+    public List<EmailSentDTO> findAll() {
+        return emailSentMapper.toDTOList(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmailSent> findById(@PathVariable Long id) {
+    public ResponseEntity<EmailSentDTO> findById(@PathVariable Long id) {
         return service.findById(id)
-                .map(ResponseEntity::ok)
+                .map(emailSent -> ResponseEntity.ok(emailSentMapper.toDTO(emailSent)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public EmailSent create(@RequestBody EmailSent emailSent) {
-        return service.save(emailSent);
+    public EmailSentDTO create(@RequestBody EmailSentDTO emailSentDTO) {
+        EmailSent emailSent = emailSentMapper.toEntity(emailSentDTO);
+        return emailSentMapper.toDTO(service.save(emailSent));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmailSent> update(@PathVariable Long id, @RequestBody EmailSent emailSent) {
+    public ResponseEntity<EmailSentDTO> update(@PathVariable Long id, @RequestBody EmailSentDTO emailSentDTO) {
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(service.save(emailSent));
+        EmailSent emailSent = emailSentMapper.toEntity(emailSentDTO);
+        return ResponseEntity.ok(emailSentMapper.toDTO(service.save(emailSent)));
     }
 
     @DeleteMapping("/{id}")
@@ -50,7 +55,7 @@ public class EmailSentController {
     }
 
     @GetMapping("/account/{idAccount}")
-    public List<EmailSent> findByIdAccount(@PathVariable Long idAccount) {
-        return service.findByIdAccount(idAccount);
+    public List<EmailSentDTO> findByIdAccount(@PathVariable Long idAccount) {
+        return emailSentMapper.toDTOList(service.findByIdAccount(idAccount));
     }
 }

@@ -1,7 +1,9 @@
 package com.sql.sqlextra.controller;
 
+import com.sql.sqlextra.dto.AccountSessionDTO;
 import com.sql.sqlextra.entity.AccountSession;
 import com.sql.sqlextra.entity.AccountSessionId;
+import com.sql.sqlextra.mapper.AccountSessionMapper;
 import com.sql.sqlextra.service.AccountSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,25 +17,27 @@ import java.util.List;
 public class AccountSessionController {
 
     private final AccountSessionService service;
+    private final AccountSessionMapper accountSessionMapper;
 
     @GetMapping
-    public List<AccountSession> findAll() {
-        return service.findAll();
+    public List<AccountSessionDTO> findAll() {
+        return accountSessionMapper.toDTOList(service.findAll());
     }
 
     @GetMapping("/{accountId}/{gaSessionId}")
-    public ResponseEntity<AccountSession> findById(
+    public ResponseEntity<AccountSessionDTO> findById(
             @PathVariable Long accountId,
             @PathVariable String gaSessionId) {
         AccountSessionId id = new AccountSessionId(accountId, gaSessionId);
         return service.findById(id)
-                .map(ResponseEntity::ok)
+                .map(session -> ResponseEntity.ok(accountSessionMapper.toDTO(session)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public AccountSession create(@RequestBody AccountSession accountSession) {
-        return service.save(accountSession);
+    public AccountSessionDTO create(@RequestBody AccountSessionDTO accountSessionDTO) {
+        AccountSession session = accountSessionMapper.toEntity(accountSessionDTO);
+        return accountSessionMapper.toDTO(service.save(session));
     }
 
     @DeleteMapping("/{accountId}/{gaSessionId}")
@@ -49,12 +53,12 @@ public class AccountSessionController {
     }
 
     @GetMapping("/account/{accountId}")
-    public List<AccountSession> findByAccountId(@PathVariable Long accountId) {
-        return service.findByAccountId(accountId);
+    public List<AccountSessionDTO> findByAccountId(@PathVariable Long accountId) {
+        return accountSessionMapper.toDTOList(service.findByAccountId(accountId));
     }
 
     @GetMapping("/session/{gaSessionId}")
-    public List<AccountSession> findByGaSessionId(@PathVariable String gaSessionId) {
-        return service.findByGaSessionId(gaSessionId);
+    public List<AccountSessionDTO> findByGaSessionId(@PathVariable String gaSessionId) {
+        return accountSessionMapper.toDTOList(service.findByGaSessionId(gaSessionId));
     }
 }

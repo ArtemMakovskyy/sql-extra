@@ -1,6 +1,8 @@
 package com.sql.sqlextra.controller;
 
+import com.sql.sqlextra.dto.EmailOpenDTO;
 import com.sql.sqlextra.entity.EmailOpen;
+import com.sql.sqlextra.mapper.EmailOpenMapper;
 import com.sql.sqlextra.service.EmailOpenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,30 +16,33 @@ import java.util.List;
 public class EmailOpenController {
 
     private final EmailOpenService service;
+    private final EmailOpenMapper emailOpenMapper;
 
     @GetMapping
-    public List<EmailOpen> findAll() {
-        return service.findAll();
+    public List<EmailOpenDTO> findAll() {
+        return emailOpenMapper.toDTOList(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmailOpen> findById(@PathVariable Long id) {
+    public ResponseEntity<EmailOpenDTO> findById(@PathVariable Long id) {
         return service.findById(id)
-                .map(ResponseEntity::ok)
+                .map(emailOpen -> ResponseEntity.ok(emailOpenMapper.toDTO(emailOpen)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public EmailOpen create(@RequestBody EmailOpen emailOpen) {
-        return service.save(emailOpen);
+    public EmailOpenDTO create(@RequestBody EmailOpenDTO emailOpenDTO) {
+        EmailOpen emailOpen = emailOpenMapper.toEntity(emailOpenDTO);
+        return emailOpenMapper.toDTO(service.save(emailOpen));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmailOpen> update(@PathVariable Long id, @RequestBody EmailOpen emailOpen) {
+    public ResponseEntity<EmailOpenDTO> update(@PathVariable Long id, @RequestBody EmailOpenDTO emailOpenDTO) {
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(service.save(emailOpen));
+        EmailOpen emailOpen = emailOpenMapper.toEntity(emailOpenDTO);
+        return ResponseEntity.ok(emailOpenMapper.toDTO(service.save(emailOpen)));
     }
 
     @DeleteMapping("/{id}")
@@ -50,7 +55,7 @@ public class EmailOpenController {
     }
 
     @GetMapping("/account/{idAccount}")
-    public List<EmailOpen> findByIdAccount(@PathVariable Long idAccount) {
-        return service.findByIdAccount(idAccount);
+    public List<EmailOpenDTO> findByIdAccount(@PathVariable Long idAccount) {
+        return emailOpenMapper.toDTOList(service.findByIdAccount(idAccount));
     }
 }

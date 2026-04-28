@@ -1,6 +1,8 @@
 package com.sql.sqlextra.controller;
 
+import com.sql.sqlextra.dto.EmailVisitDTO;
 import com.sql.sqlextra.entity.EmailVisit;
+import com.sql.sqlextra.mapper.EmailVisitMapper;
 import com.sql.sqlextra.service.EmailVisitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,30 +16,33 @@ import java.util.List;
 public class EmailVisitController {
 
     private final EmailVisitService service;
+    private final EmailVisitMapper emailVisitMapper;
 
     @GetMapping
-    public List<EmailVisit> findAll() {
-        return service.findAll();
+    public List<EmailVisitDTO> findAll() {
+        return emailVisitMapper.toDTOList(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmailVisit> findById(@PathVariable Long id) {
+    public ResponseEntity<EmailVisitDTO> findById(@PathVariable Long id) {
         return service.findById(id)
-                .map(ResponseEntity::ok)
+                .map(emailVisit -> ResponseEntity.ok(emailVisitMapper.toDTO(emailVisit)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public EmailVisit create(@RequestBody EmailVisit emailVisit) {
-        return service.save(emailVisit);
+    public EmailVisitDTO create(@RequestBody EmailVisitDTO emailVisitDTO) {
+        EmailVisit emailVisit = emailVisitMapper.toEntity(emailVisitDTO);
+        return emailVisitMapper.toDTO(service.save(emailVisit));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmailVisit> update(@PathVariable Long id, @RequestBody EmailVisit emailVisit) {
+    public ResponseEntity<EmailVisitDTO> update(@PathVariable Long id, @RequestBody EmailVisitDTO emailVisitDTO) {
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(service.save(emailVisit));
+        EmailVisit emailVisit = emailVisitMapper.toEntity(emailVisitDTO);
+        return ResponseEntity.ok(emailVisitMapper.toDTO(service.save(emailVisit)));
     }
 
     @DeleteMapping("/{id}")
@@ -50,7 +55,7 @@ public class EmailVisitController {
     }
 
     @GetMapping("/account/{idAccount}")
-    public List<EmailVisit> findByIdAccount(@PathVariable Long idAccount) {
-        return service.findByIdAccount(idAccount);
+    public List<EmailVisitDTO> findByIdAccount(@PathVariable Long idAccount) {
+        return emailVisitMapper.toDTOList(service.findByIdAccount(idAccount));
     }
 }
