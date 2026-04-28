@@ -3,7 +3,7 @@
 
 -- changeset author:1
 CREATE TABLE products (
-    item_id INTEGER PRIMARY KEY,
+    item_id BIGINT PRIMARY KEY,
     name VARCHAR(255),
     category VARCHAR(100),
     price DECIMAL(10, 2),

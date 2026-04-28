@@ -35,7 +35,7 @@ public class AccountSessionService {
         return repository.existsById(id);
     }
 
-    public List<AccountSession> findByAccountId(Integer accountId) {
+    public List<AccountSession> findByAccountId(Long accountId) {
         return repository.findAll().stream()
                 .filter(as -> as.getId().getAccountId().equals(accountId))
                 .toList();

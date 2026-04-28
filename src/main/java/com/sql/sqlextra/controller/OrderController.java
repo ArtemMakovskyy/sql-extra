@@ -55,7 +55,7 @@ public class OrderController {
     }
 
     @GetMapping("/product/{itemId}")
-    public List<OrderEntity> findByItemId(@PathVariable Integer itemId) {
+    public List<OrderEntity> findByItemId(@PathVariable Long itemId) {
         return service.findByItemId(itemId);
     }
 }

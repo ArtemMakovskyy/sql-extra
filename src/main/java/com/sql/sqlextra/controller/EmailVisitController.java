@@ -50,7 +50,7 @@ public class EmailVisitController {
     }
 
     @GetMapping("/account/{idAccount}")
-    public List<EmailVisit> findByIdAccount(@PathVariable Integer idAccount) {
+    public List<EmailVisit> findByIdAccount(@PathVariable Long idAccount) {
         return service.findByIdAccount(idAccount);
     }
 }

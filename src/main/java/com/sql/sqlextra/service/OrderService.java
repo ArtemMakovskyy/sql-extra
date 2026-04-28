@@ -40,7 +40,7 @@ public class OrderService {
                 .toList();
     }
 
-    public List<OrderEntity> findByItemId(Integer itemId) {
+    public List<OrderEntity> findByItemId(Long itemId) {
         return repository.findAll().stream()
                 .filter(o -> o.getItemId().equals(itemId))
                 .toList();

@@ -20,5 +20,5 @@ public class OrderEntity {
     private String gaSessionId;
 
     @Column(name = "item_id", nullable = false)
-    private Integer itemId;
+    private Long itemId;
 }

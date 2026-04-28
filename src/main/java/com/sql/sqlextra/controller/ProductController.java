@@ -21,7 +21,7 @@ public class ProductController {
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<Product> findById(@PathVariable Integer itemId) {
+    public ResponseEntity<Product> findById(@PathVariable Long itemId) {
         return service.findById(itemId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -33,7 +33,7 @@ public class ProductController {
     }
 
     @PutMapping("/{itemId}")
-    public ResponseEntity<Product> update(@PathVariable Integer itemId, @RequestBody Product product) {
+    public ResponseEntity<Product> update(@PathVariable Long itemId, @RequestBody Product product) {
         if (!service.existsById(itemId)) {
             return ResponseEntity.notFound().build();
         }
@@ -41,7 +41,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{itemId}")
-    public ResponseEntity<Void> delete(@PathVariable Integer itemId) {
+    public ResponseEntity<Void> delete(@PathVariable Long itemId) {
         if (!service.existsById(itemId)) {
             return ResponseEntity.notFound().build();
         }

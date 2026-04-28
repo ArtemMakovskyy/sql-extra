@@ -19,7 +19,7 @@ public class Product {
 
     @Id
     @Column(name = "item_id")
-    private Integer itemId;
+    private Long itemId;
 
     @Column(nullable = false)
     private String name;
@@ -32,7 +32,7 @@ public class Product {
     @Column(name = "short_description")
     private String shortDescription;
 
-    public Product(Integer itemId, String name, String category, BigDecimal price, String shortDescription) {
+    public Product(Long itemId, String name, String category, BigDecimal price, String shortDescription) {
         this.itemId = itemId;
         this.name = name;
         this.category = category;

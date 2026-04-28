@@ -18,7 +18,7 @@ public class AccountService {
         return repository.findAll();
     }
 
-    public Optional<Account> findById(Integer id) {
+    public Optional<Account> findById(Long id) {
         return repository.findById(id);
     }
 
@@ -26,11 +26,11 @@ public class AccountService {
         return repository.save(account);
     }
 
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         repository.deleteById(id);
     }
 
-    public boolean existsById(Integer id) {
+    public boolean existsById(Long id) {
         return repository.existsById(id);
     }
 }

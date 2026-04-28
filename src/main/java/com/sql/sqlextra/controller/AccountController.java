@@ -21,7 +21,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Account> findById(@PathVariable Integer id) {
+    public ResponseEntity<Account> findById(@PathVariable Long id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -33,7 +33,7 @@ public class AccountController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Account> update(@PathVariable Integer id, @RequestBody Account account) {
+    public ResponseEntity<Account> update(@PathVariable Long id, @RequestBody Account account) {
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
@@ -41,7 +41,7 @@ public class AccountController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

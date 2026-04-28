@@ -17,7 +17,7 @@ public class EmailVisit {
     private Long id;
 
     @Column(name = "id_account", nullable = false)
-    private Integer idAccount;
+    private Long idAccount;
 
     @Column(name = "visit_date")
     private Integer visitDate;

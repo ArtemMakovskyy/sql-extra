@@ -34,7 +34,7 @@ public class EmailVisitService {
         return repository.existsById(id);
     }
 
-    public List<EmailVisit> findByIdAccount(Integer idAccount) {
+    public List<EmailVisit> findByIdAccount(Long idAccount) {
         return repository.findAll().stream()
                 .filter(e -> e.getIdAccount().equals(idAccount))
                 .toList();

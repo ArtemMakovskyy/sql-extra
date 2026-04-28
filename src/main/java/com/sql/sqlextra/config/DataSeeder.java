@@ -90,7 +90,7 @@ public class DataSeeder implements CommandLineRunner {
 
         for (int i = 1; i <= productsCount; i++) {
             Product product = new Product(
-                    i,
+                    (long) i,
                     faker.commerce().productName(),
                     categories[random.nextInt(categories.length)],
                     new BigDecimal(faker.commerce().price().replace(",", "")),

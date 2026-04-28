@@ -5,7 +5,7 @@
 CREATE TABLE orders (
     id BIGSERIAL PRIMARY KEY,
     ga_session_id VARCHAR(255) NOT NULL,
-    item_id INTEGER NOT NULL
+    item_id BIGINT NOT NULL
 );
 
 -- changeset author:2

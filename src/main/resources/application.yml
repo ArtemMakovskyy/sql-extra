@@ -21,6 +21,6 @@ server:
   port: ${SERVER_PORT:8080}
 
 seeder:
-  products: ${SEEDER_PRODUCTS:5000}
-  sessions: ${SEEDER_SESSIONS:20000}
-  accounts: ${SEEDER_ACCOUNTS:10000}
+  products: ${SEEDER_PRODUCTS:500}
+  sessions: ${SEEDER_SESSIONS:2000}
+  accounts: ${SEEDER_ACCOUNTS:1000}

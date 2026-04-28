@@ -34,7 +34,7 @@ public class EmailSentService {
         return repository.existsById(id);
     }
 
-    public List<EmailSent> findByIdAccount(Integer idAccount) {
+    public List<EmailSent> findByIdAccount(Long idAccount) {
         return repository.findAll().stream()
                 .filter(e -> e.getIdAccount().equals(idAccount))
                 .toList();

@@ -23,7 +23,7 @@ public class AccountSessionController {
 
     @GetMapping("/{accountId}/{gaSessionId}")
     public ResponseEntity<AccountSession> findById(
-            @PathVariable Integer accountId,
+            @PathVariable Long accountId,
             @PathVariable String gaSessionId) {
         AccountSessionId id = new AccountSessionId(accountId, gaSessionId);
         return service.findById(id)
@@ -38,7 +38,7 @@ public class AccountSessionController {
 
     @DeleteMapping("/{accountId}/{gaSessionId}")
     public ResponseEntity<Void> delete(
-            @PathVariable Integer accountId,
+            @PathVariable Long accountId,
             @PathVariable String gaSessionId) {
         AccountSessionId id = new AccountSessionId(accountId, gaSessionId);
         if (!service.existsById(id)) {
@@ -49,7 +49,7 @@ public class AccountSessionController {
     }
 
     @GetMapping("/account/{accountId}")
-    public List<AccountSession> findByAccountId(@PathVariable Integer accountId) {
+    public List<AccountSession> findByAccountId(@PathVariable Long accountId) {
         return service.findByAccountId(accountId);
     }
 

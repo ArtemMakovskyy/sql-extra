@@ -18,7 +18,7 @@ public class ProductService {
         return repository.findAll();
     }
 
-    public Optional<Product> findById(Integer itemId) {
+    public Optional<Product> findById(Long itemId) {
         return repository.findById(itemId);
     }
 
@@ -26,11 +26,11 @@ public class ProductService {
         return repository.save(product);
     }
 
-    public void deleteById(Integer itemId) {
+    public void deleteById(Long itemId) {
         repository.deleteById(itemId);
     }
 
-    public boolean existsById(Integer itemId) {
+    public boolean existsById(Long itemId) {
         return repository.existsById(itemId);
     }
 }
