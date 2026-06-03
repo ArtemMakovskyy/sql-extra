@@ -27,6 +27,10 @@ public class AccountSessionService {
         return repository.save(accountSession);
     }
 
+    public List<AccountSession> saveAll(List<AccountSession> accountSessions) {
+        return repository.saveAll(accountSessions);
+    }
+
     public void deleteById(AccountSessionId id) {
         repository.deleteById(id);
     }

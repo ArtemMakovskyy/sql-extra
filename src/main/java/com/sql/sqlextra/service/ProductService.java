@@ -26,6 +26,14 @@ public class ProductService {
         return repository.save(product);
     }
 
+    public List<Product> saveAll(List<Product> products) {
+        return repository.saveAll(products);
+    }
+
+    public long count() {
+        return repository.count();
+    }
+
     public void deleteById(Long itemId) {
         repository.deleteById(itemId);
     }

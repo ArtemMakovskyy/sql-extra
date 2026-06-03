@@ -26,6 +26,10 @@ public class SessionParamsService {
         return repository.save(sessionParams);
     }
 
+    public List<SessionParams> saveAll(List<SessionParams> sessionParamsList) {
+        return repository.saveAll(sessionParamsList);
+    }
+
     public void deleteById(String gaSessionId) {
         repository.deleteById(gaSessionId);
     }

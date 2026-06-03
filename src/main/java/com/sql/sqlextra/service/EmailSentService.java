@@ -26,6 +26,10 @@ public class EmailSentService {
         return repository.save(emailSent);
     }
 
+    public List<EmailSent> saveAll(List<EmailSent> emailSents) {
+        return repository.saveAll(emailSents);
+    }
+
     public void deleteById(Long id) {
         repository.deleteById(id);
     }

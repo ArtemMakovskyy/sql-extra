@@ -26,6 +26,10 @@ public class AbTestService {
         return repository.save(abTest);
     }
 
+    public List<AbTest> saveAll(List<AbTest> abTests) {
+        return repository.saveAll(abTests);
+    }
+
     public void deleteById(Long id) {
         repository.deleteById(id);
     }

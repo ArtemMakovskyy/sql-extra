@@ -26,6 +26,10 @@ public class EventParamsService {
         return repository.save(eventParams);
     }
 
+    public List<EventParams> saveAll(List<EventParams> events) {
+        return repository.saveAll(events);
+    }
+
     public void deleteById(Long id) {
         repository.deleteById(id);
     }

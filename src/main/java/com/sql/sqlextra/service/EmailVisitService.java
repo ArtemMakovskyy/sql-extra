@@ -26,6 +26,10 @@ public class EmailVisitService {
         return repository.save(emailVisit);
     }
 
+    public List<EmailVisit> saveAll(List<EmailVisit> emailVisits) {
+        return repository.saveAll(emailVisits);
+    }
+
     public void deleteById(Long id) {
         repository.deleteById(id);
     }

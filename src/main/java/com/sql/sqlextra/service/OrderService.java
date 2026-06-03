@@ -26,6 +26,10 @@ public class OrderService {
         return repository.save(order);
     }
 
+    public List<OrderEntity> saveAll(List<OrderEntity> orders) {
+        return repository.saveAll(orders);
+    }
+
     public void deleteById(Long id) {
         repository.deleteById(id);
     }

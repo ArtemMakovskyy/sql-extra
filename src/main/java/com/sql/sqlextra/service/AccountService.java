@@ -26,6 +26,10 @@ public class AccountService {
         return repository.save(account);
     }
 
+    public List<Account> saveAll(List<Account> accounts) {
+        return repository.saveAll(accounts);
+    }
+
     public void deleteById(Long id) {
         repository.deleteById(id);
     }

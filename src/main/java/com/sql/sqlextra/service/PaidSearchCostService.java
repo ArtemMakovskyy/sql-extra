@@ -27,6 +27,10 @@ public class PaidSearchCostService {
         return repository.save(paidSearchCost);
     }
 
+    public List<PaidSearchCost> saveAll(List<PaidSearchCost> costs) {
+        return repository.saveAll(costs);
+    }
+
     public void deleteById(LocalDate date) {
         repository.deleteById(date);
     }

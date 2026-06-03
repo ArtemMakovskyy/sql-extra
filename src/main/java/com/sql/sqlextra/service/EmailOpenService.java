@@ -26,6 +26,10 @@ public class EmailOpenService {
         return repository.save(emailOpen);
     }
 
+    public List<EmailOpen> saveAll(List<EmailOpen> emailOpens) {
+        return repository.saveAll(emailOpens);
+    }
+
     public void deleteById(Long id) {
         repository.deleteById(id);
     }

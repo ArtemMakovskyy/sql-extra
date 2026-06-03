@@ -27,6 +27,10 @@ public class RevenuePredictService {
         return repository.save(revenuePredict);
     }
 
+    public List<RevenuePredict> saveAll(List<RevenuePredict> predicts) {
+        return repository.saveAll(predicts);
+    }
+
     public void deleteById(LocalDate date) {
         repository.deleteById(date);
     }

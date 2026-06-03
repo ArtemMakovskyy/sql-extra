@@ -1,7 +1,7 @@
 package com.sql.sqlextra.config;
 
 import com.sql.sqlextra.entity.*;
-import com.sql.sqlextra.repository.*;
+import com.sql.sqlextra.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
@@ -32,26 +32,26 @@ public class DataSeeder implements CommandLineRunner {
     @Value("${seeder.accounts:100}")
     private int accountsCount;
 
-    private final ProductRepository productRepository;
-    private final SessionRepository sessionRepository;
-    private final SessionParamsRepository sessionParamsRepository;
-    private final AccountRepository accountRepository;
-    private final AccountSessionRepository accountSessionRepository;
-    private final OrderRepository orderRepository;
-    private final AbTestRepository abTestRepository;
-    private final EventParamsRepository eventParamsRepository;
-    private final EmailSentRepository emailSentRepository;
-    private final EmailOpenRepository emailOpenRepository;
-    private final EmailVisitRepository emailVisitRepository;
-    private final PaidSearchCostRepository paidSearchCostRepository;
-    private final RevenuePredictRepository revenuePredictRepository;
+    private final ProductService productService;
+    private final SessionService sessionService;
+    private final SessionParamsService sessionParamsService;
+    private final AccountService accountService;
+    private final AccountSessionService accountSessionService;
+    private final OrderService orderService;
+    private final AbTestService abTestService;
+    private final EventParamsService eventParamsService;
+    private final EmailSentService emailSentService;
+    private final EmailOpenService emailOpenService;
+    private final EmailVisitService emailVisitService;
+    private final PaidSearchCostService paidSearchCostService;
+    private final RevenuePredictService revenuePredictService;
 
     private final Faker faker = new Faker(new Locale("en"));
     private final Random random = new Random();
 
     @Override
     public void run(String... args) {
-        if (productRepository.count() > 0) {
+        if (productService.count() > 0) {
             log.info("Database already contains data, skipping seeding");
             return;
         }
@@ -99,7 +99,7 @@ public class DataSeeder implements CommandLineRunner {
             products.add(product);
         }
 
-        return productRepository.saveAll(products);
+        return productService.saveAll(products);
     }
 
     private List<Session> seedSessions() {
@@ -113,7 +113,7 @@ public class DataSeeder implements CommandLineRunner {
             sessions.add(session);
         }
 
-        return sessionRepository.saveAll(sessions);
+        return sessionService.saveAll(sessions);
     }
 
     private List<SessionParams> seedSessionParams(List<Session> sessions) {
@@ -156,7 +156,7 @@ public class DataSeeder implements CommandLineRunner {
             paramsList.add(params);
         }
 
-        return sessionParamsRepository.saveAll(paramsList);
+        return sessionParamsService.saveAll(paramsList);
     }
 
     private List<Account> seedAccounts() {
@@ -171,7 +171,7 @@ public class DataSeeder implements CommandLineRunner {
             accounts.add(account);
         }
 
-        return accountRepository.saveAll(accounts);
+        return accountService.saveAll(accounts);
     }
 
     private void seedAccountSessions(List<Account> accounts, List<Session> sessions) {
@@ -192,7 +192,7 @@ public class DataSeeder implements CommandLineRunner {
             }
         }
 
-        accountSessionRepository.saveAll(accountSessions);
+        accountSessionService.saveAll(accountSessions);
     }
 
     private void seedOrders(List<Session> sessions, List<Product> products) {
@@ -208,7 +208,7 @@ public class DataSeeder implements CommandLineRunner {
             }
         }
 
-        orderRepository.saveAll(orders);
+        orderService.saveAll(orders);
     }
 
     private void seedAbTests(List<Session> sessions) {
@@ -224,7 +224,7 @@ public class DataSeeder implements CommandLineRunner {
             }
         }
 
-        abTestRepository.saveAll(abTests);
+        abTestService.saveAll(abTests);
     }
 
     private void seedEventParams(List<Session> sessions) {
@@ -244,7 +244,7 @@ public class DataSeeder implements CommandLineRunner {
             }
         }
 
-        eventParamsRepository.saveAll(events);
+        eventParamsService.saveAll(events);
     }
 
     private void seedEmails(List<Account> accounts, List<Session> sessions) {
@@ -282,9 +282,9 @@ public class DataSeeder implements CommandLineRunner {
             }
         }
 
-        emailSentRepository.saveAll(emailSents);
-        emailOpenRepository.saveAll(emailOpens);
-        emailVisitRepository.saveAll(emailVisits);
+        emailSentService.saveAll(emailSents);
+        emailOpenService.saveAll(emailOpens);
+        emailVisitService.saveAll(emailVisits);
     }
 
     private void seedPaidSearchCost() {
@@ -298,7 +298,7 @@ public class DataSeeder implements CommandLineRunner {
             costs.add(cost);
         }
 
-        paidSearchCostRepository.saveAll(costs);
+        paidSearchCostService.saveAll(costs);
     }
 
     private void seedRevenuePredict() {
@@ -312,6 +312,6 @@ public class DataSeeder implements CommandLineRunner {
             predicts.add(predict);
         }
 
-        revenuePredictRepository.saveAll(predicts);
+        revenuePredictService.saveAll(predicts);
     }
 }
