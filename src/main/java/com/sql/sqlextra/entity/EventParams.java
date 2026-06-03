@@ -15,20 +15,19 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@IdClass(EventParamsId.class)
 public class EventParams {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "ga_session_id", nullable = false)
     private String gaSessionId;
 
-    @Column(name = "event_date")
-    private LocalDate eventDate;
-
+    @Id
     @Column(name = "event_timestamp")
     private LocalDateTime eventTimestamp;
+
+    @Column(name = "event_date")
+    private LocalDate eventDate;
 
     @Column(name = "event_name")
     private String eventName;

@@ -230,12 +230,13 @@ public class DataSeeder implements CommandLineRunner {
         String[] eventNames = {"page_view", "scroll", "add_to_cart", "remove_from_cart", "checkout", "purchase", "sign_up", "login", "user_engagement", "click"};
 
         for (SessionDTO session : sessions) {
+            LocalDateTime baseTimestamp = LocalDateTime.now();
             int numEvents = random.nextInt(10) + 1;
             for (int i = 0; i < numEvents; i++) {
                 EventParamsDTO event = new EventParamsDTO();
                 event.setGaSessionId(session.getGaSessionId());
                 event.setEventDate(session.getDate());
-                event.setEventTimestamp(LocalDateTime.now().minusDays(random.nextInt(30)));
+                event.setEventTimestamp(baseTimestamp.minusDays(random.nextInt(30)).plusNanos(i));
                 event.setEventName(eventNames[random.nextInt(eventNames.length)]);
                 event.setEventParams("{\"key\": \"" + faker.lorem().word() + "\"}");
                 events.add(event);

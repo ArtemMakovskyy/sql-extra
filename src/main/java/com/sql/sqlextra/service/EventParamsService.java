@@ -2,6 +2,7 @@ package com.sql.sqlextra.service;
 
 import com.sql.sqlextra.dto.EventParamsDTO;
 import com.sql.sqlextra.entity.EventParams;
+import com.sql.sqlextra.entity.EventParamsId;
 import com.sql.sqlextra.mapper.EventParamsMapper;
 import com.sql.sqlextra.repository.EventParamsRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class EventParamsService {
         return mapper.toDTOList(repository.findAll());
     }
 
-    public Optional<EventParamsDTO> findById(Long id) {
+    public Optional<EventParamsDTO> findById(EventParamsId id) {
         return repository.findById(id).map(mapper::toDTO);
     }
 
@@ -30,11 +31,11 @@ public class EventParamsService {
         return mapper.toDTO(repository.save(entity));
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(EventParamsId id) {
         repository.deleteById(id);
     }
 
-    public boolean existsById(Long id) {
+    public boolean existsById(EventParamsId id) {
         return repository.existsById(id);
     }
 

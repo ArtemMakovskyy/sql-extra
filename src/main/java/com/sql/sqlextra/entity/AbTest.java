@@ -10,15 +10,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@IdClass(AbTestId.class)
 public class AbTest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "ga_session_id", nullable = false)
     private String gaSessionId;
 
+    @Id
     private Integer test;
 
     @Column(name = "test_group")

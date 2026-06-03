@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventParamsDTO {
-    private Long id;
     private String gaSessionId;
     private LocalDate eventDate;
     private LocalDateTime eventTimestamp;

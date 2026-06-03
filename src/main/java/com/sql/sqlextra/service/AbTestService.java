@@ -2,6 +2,7 @@ package com.sql.sqlextra.service;
 
 import com.sql.sqlextra.dto.AbTestDTO;
 import com.sql.sqlextra.entity.AbTest;
+import com.sql.sqlextra.entity.AbTestId;
 import com.sql.sqlextra.mapper.AbTestMapper;
 import com.sql.sqlextra.repository.AbTestRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class AbTestService {
         return mapper.toDTOList(repository.findAll());
     }
 
-    public Optional<AbTestDTO> findById(Long id) {
+    public Optional<AbTestDTO> findById(AbTestId id) {
         return repository.findById(id).map(mapper::toDTO);
     }
 
@@ -30,11 +31,11 @@ public class AbTestService {
         return mapper.toDTO(repository.save(entity));
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(AbTestId id) {
         repository.deleteById(id);
     }
 
-    public boolean existsById(Long id) {
+    public boolean existsById(AbTestId id) {
         return repository.existsById(id);
     }
 

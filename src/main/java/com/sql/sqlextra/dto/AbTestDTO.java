@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AbTestDTO {
-    private Long id;
     private String gaSessionId;
     private Integer test;
     private Integer testGroup;
