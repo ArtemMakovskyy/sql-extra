@@ -49,7 +49,6 @@
 
 **Artem Makovskyy**
 - Email: artem.makovskyi.jv@gmail.com
-- [Telegram](https://t.me/artem_makovskyi)
-- [LinkedIn](https://linkedin.com/in/artem-makovskyi)
+- [LinkedIn](https://www.linkedin.com/in/artem-makovskyi-557783304/)
 - [GitHub](https://github.com/ArtemMakovskyy)
 
