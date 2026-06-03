@@ -1,3 +1,5 @@
+-- 1. Revenue by Country (VIEW)
+-- 2. Accounts by Month (VIEW with CTE and window function)
 CREATE OR REPLACE VIEW vw_revenue_by_country AS
 SELECT
     sp.country,

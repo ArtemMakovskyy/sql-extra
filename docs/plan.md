@@ -44,7 +44,7 @@
 | EventParams | event_params | Події користувача |
 | OrderEntity | orders | Замовлення |
 | PaidSearchCost | paid_search_cost | Витрати на трафік |
-| Product | product | Товари |
+| Product | products | Товари |
 | RevenuePredict | revenue_predict | Прогнози доходу |
 | Session | sessions | Сесії користувачів |
 | SessionParams | session_params | Метадані сесій |
@@ -53,13 +53,13 @@
 
 ## 3. Таблиці та поля
 
-### 1) product
+### 1) products
 | Поле | Тип | Опис |
 |------|-----|------|
-| item_id | INTEGER | PK - Унікальний ідентифікатор |
-| name | VARCHAR(255) | Назва товару |
+| item_id | BIGINT | PK - Унікальний ідентифікатор |
+| name | VARCHAR(255) | NOT NULL - Назва товару |
 | category | VARCHAR(100) | Категорія товару |
-| price | DECIMAL(10,2) | Ціна, USD |
+| price | DECIMAL(10,2) | NOT NULL - Ціна, USD |
 | short_description | TEXT | Короткий опис |
 
 ### 2) account
@@ -74,17 +74,16 @@
 | Поле | Тип | Опис |
 |------|-----|------|
 | ga_session_id | VARCHAR(255) | PK - Унікальний ідентифікатор сесії |
-| date | DATE | Дата сесії |
+| date | DATE | NOT NULL - Дата сесії |
 
 ### 4) session_params
 | Поле | Тип | Опис |
 |------|-----|------|
-| id | BIGSERIAL | PK - Унікальний ідентифікатор |
-| ga_session_id | VARCHAR(255) | UNIQUE - Посилання на сесію |
+| ga_session_id | VARCHAR(255) | PK - Унікальний ідентифікатор сесії |
 | device | VARCHAR(50) | Тип пристрою |
 | mobile_model_name | VARCHAR(100) | Модель мобільного |
 | operating_system | VARCHAR(50) | ОС |
-| language | VARCHAR(10) | Мова браузера |
+| language | VARCHAR(50) | Мова браузера |
 | browser | VARCHAR(50) | Браузер |
 | continent | VARCHAR(20) | Континент |
 | country | VARCHAR(50) | Країна |
@@ -101,18 +100,16 @@
 ### 6) ab_test
 | Поле | Тип | Опис |
 |------|-----|------|
-| id | BIGSERIAL | PK - Унікальний ідентифікатор |
-| ga_session_id | VARCHAR(255) | NOT NULL - Посилання на sessions |
-| test | INTEGER | Номер тесту |
+| ga_session_id | VARCHAR(255) | PK часть 1 - Посилання на sessions |
+| test | INTEGER | PK часть 2 - Номер тесту |
 | test_group | INTEGER | Група (1=A, 2=Б) |
 
 ### 7) event_params
 | Поле | Тип | Опис |
 |------|-----|------|
-| id | BIGSERIAL | PK - Унікальний ідентифікатор |
-| ga_session_id | VARCHAR(255) | NOT NULL - Посилання на sessions |
+| ga_session_id | VARCHAR(255) | PK часть 1 - Посилання на sessions |
 | event_date | DATE | Дата події |
-| event_timestamp | TIMESTAMP | Час події |
+| event_timestamp | TIMESTAMP | PK часть 2 - Час події |
 | event_name | VARCHAR(100) | Назва події |
 | event_params | JSONB | Параметри події |
 
@@ -121,7 +118,7 @@
 |------|-----|------|
 | id | BIGSERIAL | PK - Унікальний ідентифікатор |
 | ga_session_id | VARCHAR(255) | NOT NULL - Посилання на sessions |
-| item_id | INTEGER | NOT NULL - Посилання на product |
+| item_id | BIGINT | NOT NULL - Посилання на products |
 
 ### 9) email_sent
 | Поле | Тип | Опис |
@@ -153,16 +150,14 @@
 ### 12) paid_search_cost
 | Поле | Тип | Опис |
 |------|-----|------|
-| id | BIGSERIAL | PK - Унікальний ідентифікатор |
-| date | DATE | Дата витрати |
-| cost | DECIMAL(12,2) | Сума витрат |
+| date | DATE | PK - NOT NULL - Дата витрати |
+| cost | DECIMAL(12,2) | NOT NULL - Сума витрат |
 
 ### 13) revenue_predict
 | Поле | Тип | Опис |
 |------|-----|------|
-| id | BIGSERIAL | PK - Унікальний ідентифікатор |
-| date | DATE | Дата прогнозу |
-| predict | DECIMAL(12,2) | Прогноз, USD |
+| date | DATE | PK - NOT NULL - Дата прогнозу |
+| predict | DECIMAL(12,2) | NOT NULL - Прогноз, USD |
 
 ---
 
@@ -192,7 +187,7 @@
 ┌───────────────┐                                    ┌───────────────┐
 │   sessions    │                                    │ session_params│
 │───────────────│                                    │───────────────│
-│ga_session_id  │◄─── 1:1 ───────────────────────────│ga_session_id  │ (UNIQUE)
+│ga_session_id  │◄─── 1:1 ───────────────────────────│ga_session_id  │
 │ date          │                                    │ device        │
 └───────┬───────┘                                    │ country       │
         │                                            │ ...           │
@@ -207,10 +202,10 @@
 │test_gr. │ └────┬────┘ └─────────────┘
 └─────────┘      │
                  ▼
-          ┌─────────────┐
-          │   product   │
-          │─────────────│
-          │ item_id (PK)│
+           ┌─────────────┐
+           │   products  │
+           │─────────────│
+           │ item_id (PK)│
           │ name        │
           │ price       │
           └─────────────┘
@@ -226,14 +221,16 @@
 ## 5. DDL (PostgreSQL)
 
 ```sql
--- product
-CREATE TABLE product (
-    item_id INTEGER PRIMARY KEY,
+-- products
+CREATE TABLE products (
+    item_id BIGINT PRIMARY KEY,
     name VARCHAR(255),
     category VARCHAR(100),
     price DECIMAL(10,2),
     short_description TEXT
 );
+
+CREATE INDEX idx_products_category ON products(category);
 
 -- account
 CREATE TABLE account (
@@ -243,11 +240,16 @@ CREATE TABLE account (
     is_unsubscribed INTEGER NOT NULL CHECK (is_unsubscribed IN (0, 1))
 );
 
+CREATE INDEX idx_account_is_verified ON account(is_verified);
+CREATE INDEX idx_account_is_unsubscribed ON account(is_unsubscribed);
+
 -- sessions
 CREATE TABLE sessions (
     ga_session_id VARCHAR(255) PRIMARY KEY,
-    date DATE
+    date DATE NOT NULL
 );
+
+CREATE INDEX idx_sessions_date ON sessions(date);
 
 -- session_params
 CREATE TABLE session_params (
@@ -256,7 +258,7 @@ CREATE TABLE session_params (
     device VARCHAR(50),
     mobile_model_name VARCHAR(100),
     operating_system VARCHAR(50),
-    language VARCHAR(10),
+    language VARCHAR(50),
     browser VARCHAR(50),
     continent VARCHAR(20),
     country VARCHAR(50),
@@ -265,12 +267,28 @@ CREATE TABLE session_params (
     channel VARCHAR(50)
 );
 
+ALTER TABLE session_params ADD CONSTRAINT fk_session_params_session
+    FOREIGN KEY (ga_session_id) REFERENCES sessions(ga_session_id);
+
+CREATE INDEX idx_session_params_ga_session_id ON session_params(ga_session_id);
+CREATE INDEX idx_session_params_country ON session_params(country);
+CREATE INDEX idx_session_params_device ON session_params(device);
+
 -- account_session
 CREATE TABLE account_session (
     account_id BIGINT NOT NULL,
     ga_session_id VARCHAR(255) NOT NULL,
     PRIMARY KEY (account_id, ga_session_id)
 );
+
+ALTER TABLE account_session ADD CONSTRAINT fk_account_session_account
+    FOREIGN KEY (account_id) REFERENCES account(id);
+
+ALTER TABLE account_session ADD CONSTRAINT fk_account_session_session
+    FOREIGN KEY (ga_session_id) REFERENCES sessions(ga_session_id);
+
+CREATE INDEX idx_account_session_account_id ON account_session(account_id);
+CREATE INDEX idx_account_session_ga_session_id ON account_session(ga_session_id);
 
 -- ab_test
 CREATE TABLE ab_test (
@@ -279,6 +297,11 @@ CREATE TABLE ab_test (
     test INTEGER,
     test_group INTEGER
 );
+
+ALTER TABLE ab_test ADD CONSTRAINT fk_ab_test_session
+    FOREIGN KEY (ga_session_id) REFERENCES sessions(ga_session_id);
+
+CREATE INDEX idx_ab_test_ga_session_id ON ab_test(ga_session_id);
 
 -- event_params
 CREATE TABLE event_params (
@@ -290,12 +313,27 @@ CREATE TABLE event_params (
     event_params JSONB
 );
 
+ALTER TABLE event_params ADD CONSTRAINT fk_event_params_session
+    FOREIGN KEY (ga_session_id) REFERENCES sessions(ga_session_id);
+
+CREATE INDEX idx_event_params_ga_session_id ON event_params(ga_session_id);
+CREATE INDEX idx_event_params_event_date ON event_params(event_date);
+
 -- orders
 CREATE TABLE orders (
     id BIGSERIAL PRIMARY KEY,
     ga_session_id VARCHAR(255) NOT NULL,
-    item_id INTEGER NOT NULL
+    item_id BIGINT NOT NULL
 );
+
+ALTER TABLE orders ADD CONSTRAINT fk_orders_session
+    FOREIGN KEY (ga_session_id) REFERENCES sessions(ga_session_id);
+
+ALTER TABLE orders ADD CONSTRAINT fk_orders_product
+    FOREIGN KEY (item_id) REFERENCES products(item_id);
+
+CREATE INDEX idx_orders_ga_session_id ON orders(ga_session_id);
+CREATE INDEX idx_orders_item_id ON orders(item_id);
 
 -- email_sent
 CREATE TABLE email_sent (
@@ -306,6 +344,11 @@ CREATE TABLE email_sent (
     id_message VARCHAR(100)
 );
 
+ALTER TABLE email_sent ADD CONSTRAINT fk_email_sent_account
+    FOREIGN KEY (id_account) REFERENCES account(id);
+
+CREATE INDEX idx_email_sent_id_account ON email_sent(id_account);
+
 -- email_open
 CREATE TABLE email_open (
     id BIGSERIAL PRIMARY KEY,
@@ -314,6 +357,11 @@ CREATE TABLE email_open (
     letter_type INTEGER,
     id_message VARCHAR(100)
 );
+
+ALTER TABLE email_open ADD CONSTRAINT fk_email_open_account
+    FOREIGN KEY (id_account) REFERENCES account(id);
+
+CREATE INDEX idx_email_open_id_account ON email_open(id_account);
 
 -- email_visit
 CREATE TABLE email_visit (
@@ -324,64 +372,28 @@ CREATE TABLE email_visit (
     id_message VARCHAR(100)
 );
 
+ALTER TABLE email_visit ADD CONSTRAINT fk_email_visit_account
+    FOREIGN KEY (id_account) REFERENCES account(id);
+
+CREATE INDEX idx_email_visit_id_account ON email_visit(id_account);
+
 -- paid_search_cost
 CREATE TABLE paid_search_cost (
     id BIGSERIAL PRIMARY KEY,
-    date DATE,
-    cost DECIMAL(12,2)
+    date DATE NOT NULL,
+    cost DECIMAL(12,2) NOT NULL
 );
+
+CREATE UNIQUE INDEX idx_paid_search_cost_date ON paid_search_cost(date);
 
 -- revenue_predict
 CREATE TABLE revenue_predict (
     id BIGSERIAL PRIMARY KEY,
-    date DATE,
-    predict DECIMAL(12,2)
+    date DATE NOT NULL,
+    predict DECIMAL(12,2) NOT NULL
 );
 
--- Foreign Keys
-ALTER TABLE session_params ADD CONSTRAINT fk_session_params_session
-    FOREIGN KEY (ga_session_id) REFERENCES sessions(ga_session_id);
-
-ALTER TABLE account_session ADD CONSTRAINT fk_account_session_account
-    FOREIGN KEY (account_id) REFERENCES account(id);
-
-ALTER TABLE account_session ADD CONSTRAINT fk_account_session_session
-    FOREIGN KEY (ga_session_id) REFERENCES sessions(ga_session_id);
-
-ALTER TABLE ab_test ADD CONSTRAINT fk_ab_test_session
-    FOREIGN KEY (ga_session_id) REFERENCES sessions(ga_session_id);
-
-ALTER TABLE event_params ADD CONSTRAINT fk_event_params_session
-    FOREIGN KEY (ga_session_id) REFERENCES sessions(ga_session_id);
-
-ALTER TABLE orders ADD CONSTRAINT fk_orders_session
-    FOREIGN KEY (ga_session_id) REFERENCES sessions(ga_session_id);
-
-ALTER TABLE orders ADD CONSTRAINT fk_orders_product
-    FOREIGN KEY (item_id) REFERENCES product(item_id);
-
-ALTER TABLE email_sent ADD CONSTRAINT fk_email_sent_account
-    FOREIGN KEY (id_account) REFERENCES account(id);
-
-ALTER TABLE email_open ADD CONSTRAINT fk_email_open_account
-    FOREIGN KEY (id_account) REFERENCES account(id);
-
-ALTER TABLE email_visit ADD CONSTRAINT fk_email_visit_account
-    FOREIGN KEY (id_account) REFERENCES account(id);
-
--- Індекси
-CREATE INDEX idx_sessions_date ON sessions(date);
-CREATE INDEX idx_session_params_session ON session_params(ga_session_id);
-CREATE INDEX idx_account_session_account ON account_session(account_id);
-CREATE INDEX idx_account_session_session ON account_session(ga_session_id);
-CREATE INDEX idx_ab_test_session ON ab_test(ga_session_id);
-CREATE INDEX idx_event_params_session ON event_params(ga_session_id);
-CREATE INDEX idx_event_params_date ON event_params(event_date);
-CREATE INDEX idx_orders_session ON orders(ga_session_id);
-CREATE INDEX idx_orders_item ON orders(item_id);
-CREATE INDEX idx_email_sent_account ON email_sent(id_account);
-CREATE INDEX idx_email_open_account ON email_open(id_account);
-CREATE INDEX idx_email_visit_account ON email_visit(id_account);
+CREATE UNIQUE INDEX idx_revenue_predict_date ON revenue_predict(date);
 ```
 
 ---
@@ -392,7 +404,10 @@ CREATE INDEX idx_email_visit_account ON email_visit(id_account);
 ```java
 package com.sql.sqlextra.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -400,22 +415,34 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "product")
 @Getter
 @Setter
+@Table(name = "products")
 @NoArgsConstructor
 public class Product {
 
     @Id
     @Column(name = "item_id")
-    private Integer itemId;
+    private Long itemId;
 
+    @Column(nullable = false)
     private String name;
+
     private String category;
+
+    @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(name = "short_description", columnDefinition = "TEXT")
+    @Column(name = "short_description")
     private String shortDescription;
+
+    public Product(Long itemId, String name, String category, BigDecimal price, String shortDescription) {
+        this.itemId = itemId;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.shortDescription = shortDescription;
+    }
 }
 ```
 
@@ -506,10 +533,7 @@ import lombok.Setter;
 public class SessionParams {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "ga_session_id", nullable = false, unique = true)
+    @Column(name = "ga_session_id")
     private String gaSessionId;
 
     private String device;
@@ -520,7 +544,9 @@ public class SessionParams {
     @Column(name = "operating_system")
     private String operatingSystem;
 
+    @Column(length = 50)
     private String language;
+
     private String browser;
     private String continent;
     private String country;
@@ -572,9 +598,22 @@ public class AccountSession {
 package com.sql.sqlextra.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.io.Serializable;
+
+@Embeddable
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+public class AbTestId implements Serializable {
+    @Column(name = "ga_session_id")
+    private String gaSessionId;
+
+    private Integer test;
+}
 
 @Entity
 @Table(name = "ab_test")
@@ -582,14 +621,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class AbTest {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private AbTestId id;
 
-    @Column(name = "ga_session_id", nullable = false)
-    private String gaSessionId;
-
-    private Integer test;
+    @Column(name = "test_group")
     private Integer testGroup;
 }
 ```
@@ -599,12 +634,25 @@ public class AbTest {
 package com.sql.sqlextra.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+@Embeddable
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+public class EventParamsId implements Serializable {
+    @Column(name = "ga_session_id")
+    private String gaSessionId;
+
+    @Column(name = "event_timestamp")
+    private LocalDateTime eventTimestamp;
+}
 
 @Entity
 @Table(name = "event_params")
@@ -612,23 +660,17 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class EventParams {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "ga_session_id", nullable = false)
-    private String gaSessionId;
+    @EmbeddedId
+    private EventParamsId id;
 
     @Column(name = "event_date")
     private LocalDate eventDate;
-
-    @Column(name = "event_timestamp")
-    private LocalDateTime eventTimestamp;
 
     @Column(name = "event_name")
     private String eventName;
 
     @Column(name = "event_params", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
     private String eventParams;
 }
 ```
@@ -656,7 +698,7 @@ public class OrderEntity {
     private String gaSessionId;
 
     @Column(name = "item_id", nullable = false)
-    private Integer itemId;
+    private Long itemId;
 }
 ```
 
@@ -777,11 +819,11 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class PaidSearchCost {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
+    @Id
     private LocalDate date;
+
+    @Column(nullable = false)
     private BigDecimal cost;
 }
 ```
@@ -804,11 +846,11 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class RevenuePredict {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
+    @Id
     private LocalDate date;
+
+    @Column(nullable = false)
     private BigDecimal predict;
 }
 ```
@@ -839,7 +881,7 @@ public class RevenuePredict {
 
 ### Черга 1 (без залежностей)
 
-1. product ✅
+1. products ✅
 2. account ✅
 3. session ✅
 
@@ -860,7 +902,6 @@ public class RevenuePredict {
 
 ## Важливо
 
-- Таблиці `"session"` і `"order"` — в лапках (ключові слова SQL)
+- Таблиці використовують множину: `sessions`, `orders`, `products`, `accounts` (уникнення ключових слів SQL)
 - Колонки НЕ перейменовувати: `id_account`, `ga_session_id`, `item_id`
-- `ga_session_id` — TEXT (відповідає BigQuery STRING)
-- Для таблиць без PK в BigQuery: використовувати @EmbeddedId або JdbcTemplate
+- `ga_session_id` — VARCHAR (відповідає BigQuery STRING)

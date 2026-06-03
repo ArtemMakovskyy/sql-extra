@@ -33,3 +33,6 @@ build/
 /mvnw.cmd
 /mvnw
 /.gitattributes
+
+### Env ###
+.env
