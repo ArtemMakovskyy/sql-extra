@@ -1,167 +1,167 @@
-# План: PostgreSQL Database для data-analytics-mate.DA
+# Plan: PostgreSQL Database for data-analytics-mate.DA
 
-## Зміст
+## Table of Contents
 
-1. Опис проєкту
-2. Сутності (Entities)
-3. Таблиці та поля
-4. Зв'язки між таблицями
+1. Project Description
+2. Entities
+3. Tables and Fields
+4. Table Relationships
 5. DDL (PostgreSQL)
 6. Java Entity (JPA)
-7. Репозиторії
-8. Черга виконання
+7. Repositories
+8. Execution Order
 
 ---
 
-## 1. Опис проєкту
+## 1. Project Description
 
-База даних інтернет-магазину, що зберігає інформацію про:
+An e-commerce database that stores information about:
 
-- Реєстрації та замовлення користувачів
-- Дії користувачів на сайті
-- Надіслані повідомлення (email)
-- A/B тести
-- Витрати на платний трафік
+- User registrations and orders
+- User actions on the site
+- Sent emails
+- A/B tests
+- Paid traffic costs
 
-**Важливо:**
+**Important:**
 
-- `ga_session_id` — ідентифікатор сесії, може повторюватись (1:N)
-- Типи даних: PostgreSQL native types
-- Імена таблиць: `session` → `sessions`, `order` → `orders`
+- `ga_session_id` — session identifier, may repeat (1:N)
+- Data types: PostgreSQL native types
+- Table names: `session` → `sessions`, `order` → `orders`
 
 ---
 
-## 2. Сутності (Entities)
+## 2. Entities
 
-| Сутність | Таблиця | Опис |
+| Entity | Table | Description |
 |----------|---------|------|
-| AbTest | ab_test | A/B тести |
-| Account | account | Підписники сайту |
-| AccountSession | account_session | Сесії підписки |
-| EmailSent | email_sent | Надіслані листи |
-| EmailOpen | email_open | Відкриті листи |
-| EmailVisit | email_visit | Кліки в листах |
-| EventParams | event_params | Події користувача |
-| OrderEntity | orders | Замовлення |
-| PaidSearchCost | paid_search_cost | Витрати на трафік |
-| Product | products | Товари |
-| RevenuePredict | revenue_predict | Прогнози доходу |
-| Session | sessions | Сесії користувачів |
-| SessionParams | session_params | Метадані сесій |
+| AbTest | ab_test | A/B tests |
+| Account | account | Site subscribers |
+| AccountSession | account_session | Subscription sessions |
+| EmailSent | email_sent | Sent emails |
+| EmailOpen | email_open | Opened emails |
+| EmailVisit | email_visit | Email clicks |
+| EventParams | event_params | User events |
+| OrderEntity | orders | Orders |
+| PaidSearchCost | paid_search_cost | Traffic costs |
+| Product | products | Products |
+| RevenuePredict | revenue_predict | Revenue forecasts |
+| Session | sessions | User sessions |
+| SessionParams | session_params | Session metadata |
 
 ---
 
-## 3. Таблиці та поля
+## 3. Tables and Fields
 
 ### 1) products
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| item_id | BIGINT | PK - Унікальний ідентифікатор |
-| name | VARCHAR(255) | NOT NULL - Назва товару |
-| category | VARCHAR(100) | Категорія товару |
-| price | DECIMAL(10,2) | NOT NULL - Ціна, USD |
-| short_description | TEXT | Короткий опис |
+| item_id | BIGINT | PK - Unique identifier |
+| name | VARCHAR(255) | NOT NULL - Product name |
+| category | VARCHAR(100) | Product category |
+| price | DECIMAL(10,2) | NOT NULL - Price, USD |
+| short_description | TEXT | Short description |
 
 ### 2) account
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| id | BIGSERIAL | PK - Унікальний ідентифікатор |
-| send_interval | INTEGER | Інтервал отримання листів |
-| is_verified | INTEGER | Підтвердження email (0/1), NOT NULL, CHECK (0,1) |
-| is_unsubscribed | INTEGER | Відписка (0/1), NOT NULL, CHECK (0,1) |
+| id | BIGSERIAL | PK - Unique identifier |
+| send_interval | INTEGER | Email sending interval |
+| is_verified | INTEGER | Email verification (0/1), NOT NULL, CHECK (0,1) |
+| is_unsubscribed | INTEGER | Unsubscribed (0/1), NOT NULL, CHECK (0,1) |
 
 ### 3) sessions
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| ga_session_id | VARCHAR(255) | PK - Унікальний ідентифікатор сесії |
-| date | DATE | NOT NULL - Дата сесії |
+| ga_session_id | VARCHAR(255) | PK - Unique session identifier |
+| date | DATE | NOT NULL - Session date |
 
 ### 4) session_params
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| ga_session_id | VARCHAR(255) | PK - Унікальний ідентифікатор сесії |
-| device | VARCHAR(50) | Тип пристрою |
-| mobile_model_name | VARCHAR(100) | Модель мобільного |
-| operating_system | VARCHAR(50) | ОС |
-| language | VARCHAR(50) | Мова браузера |
-| browser | VARCHAR(50) | Браузер |
-| continent | VARCHAR(20) | Континент |
-| country | VARCHAR(50) | Країна |
-| medium | VARCHAR(50) | Джерело трафіку |
-| name | VARCHAR(100) | Додаткова інформація |
-| channel | VARCHAR(50) | Канал трафіку |
+| ga_session_id | VARCHAR(255) | PK - Unique session identifier |
+| device | VARCHAR(50) | Device type |
+| mobile_model_name | VARCHAR(100) | Mobile model |
+| operating_system | VARCHAR(50) | Operating system |
+| language | VARCHAR(50) | Browser language |
+| browser | VARCHAR(50) | Browser |
+| continent | VARCHAR(20) | Continent |
+| country | VARCHAR(50) | Country |
+| medium | VARCHAR(50) | Traffic source |
+| name | VARCHAR(100) | Additional info |
+| channel | VARCHAR(50) | Traffic channel |
 
 ### 5) account_session
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| account_id | BIGINT | PK часть 1 - Посилання на account |
-| ga_session_id | VARCHAR(255) | PK часть 2 - Посилання на sessions |
+| account_id | BIGINT | PK part 1 - Reference to account |
+| ga_session_id | VARCHAR(255) | PK part 2 - Reference to sessions |
 
 ### 6) ab_test
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| ga_session_id | VARCHAR(255) | PK часть 1 - Посилання на sessions |
-| test | INTEGER | PK часть 2 - Номер тесту |
-| test_group | INTEGER | Група (1=A, 2=Б) |
+| ga_session_id | VARCHAR(255) | PK part 1 - Reference to sessions |
+| test | INTEGER | PK part 2 - Test number |
+| test_group | INTEGER | Group (1=A, 2=B) |
 
 ### 7) event_params
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| ga_session_id | VARCHAR(255) | PK часть 1 - Посилання на sessions |
-| event_date | DATE | Дата події |
-| event_timestamp | TIMESTAMP | PK часть 2 - Час події |
-| event_name | VARCHAR(100) | Назва події |
-| event_params | JSONB | Параметри події |
+| ga_session_id | VARCHAR(255) | PK part 1 - Reference to sessions |
+| event_date | DATE | Event date |
+| event_timestamp | TIMESTAMP | PK part 2 - Event time |
+| event_name | VARCHAR(100) | Event name |
+| event_params | JSONB | Event parameters |
 
 ### 8) orders
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| id | BIGSERIAL | PK - Унікальний ідентифікатор |
-| ga_session_id | VARCHAR(255) | NOT NULL - Посилання на sessions |
-| item_id | BIGINT | NOT NULL - Посилання на products |
+| id | BIGSERIAL | PK - Unique identifier |
+| ga_session_id | VARCHAR(255) | NOT NULL - Reference to sessions |
+| item_id | BIGINT | NOT NULL - Reference to products |
 
 ### 9) email_sent
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| id | BIGSERIAL | PK - Унікальний ідентифікатор |
-| id_account | BIGINT | NOT NULL - Посилання на account |
-| sent_date | INTEGER | Дні після створення акаунта |
-| letter_type | INTEGER | Тип листа |
-| id_message | VARCHAR(100) | Ідентифікатор повідомлення |
+| id | BIGSERIAL | PK - Unique identifier |
+| id_account | BIGINT | NOT NULL - Reference to account |
+| sent_date | INTEGER | Days after account creation |
+| letter_type | INTEGER | Letter type |
+| id_message | VARCHAR(100) | Message identifier |
 
 ### 10) email_open
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| id | BIGSERIAL | PK - Унікальний ідентифікатор |
-| id_account | BIGINT | NOT NULL - Посилання на account |
-| open_date | INTEGER | Дні після створення акаунта |
-| letter_type | INTEGER | Тип листа |
-| id_message | VARCHAR(100) | Ідентифікатор листа |
+| id | BIGSERIAL | PK - Unique identifier |
+| id_account | BIGINT | NOT NULL - Reference to account |
+| open_date | INTEGER | Days after account creation |
+| letter_type | INTEGER | Letter type |
+| id_message | VARCHAR(100) | Message identifier |
 
 ### 11) email_visit
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| id | BIGSERIAL | PK - Унікальний ідентифікатор |
-| id_account | BIGINT | NOT NULL - Посилання на account |
-| visit_date | INTEGER | Дні після створення акаунта |
-| letter_type | INTEGER | Тип листа |
-| id_message | VARCHAR(100) | Ідентифікатор листа |
+| id | BIGSERIAL | PK - Unique identifier |
+| id_account | BIGINT | NOT NULL - Reference to account |
+| visit_date | INTEGER | Days after account creation |
+| letter_type | INTEGER | Letter type |
+| id_message | VARCHAR(100) | Message identifier |
 
 ### 12) paid_search_cost
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| date | DATE | PK - NOT NULL - Дата витрати |
-| cost | DECIMAL(12,2) | NOT NULL - Сума витрат |
+| date | DATE | PK - NOT NULL - Expense date |
+| cost | DECIMAL(12,2) | NOT NULL - Cost amount |
 
 ### 13) revenue_predict
-| Поле | Тип | Опис |
+| Field | Type | Description |
 |------|-----|------|
-| date | DATE | PK - NOT NULL - Дата прогнозу |
-| predict | DECIMAL(12,2) | NOT NULL - Прогноз, USD |
+| date | DATE | PK - NOT NULL - Forecast date |
+| predict | DECIMAL(12,2) | NOT NULL - Forecast, USD |
 
 ---
 
-## 4. Зв'язки між таблицями
+## 4. Table Relationships
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -857,7 +857,7 @@ public class RevenuePredict {
 
 ---
 
-## 7. Репозиторії
+## 7. Repositories
 
 | Repository | Entity |
 |------------|--------|
@@ -877,15 +877,15 @@ public class RevenuePredict {
 
 ---
 
-## 8. Черга виконання
+## 8. Execution Order
 
-### Черга 1 (без залежностей)
+### Queue 1 (no dependencies)
 
 1. products ✅
 2. account ✅
 3. session ✅
 
-### Черга 2 (залежить від черги 1)
+### Queue 2 (depends on Queue 1)
 
 4. session_params ✅
 5. account_session ✅
@@ -900,8 +900,8 @@ public class RevenuePredict {
 
 ---
 
-## Важливо
+## Important
 
-- Таблиці використовують множину: `sessions`, `orders`, `products`, `accounts` (уникнення ключових слів SQL)
-- Колонки НЕ перейменовувати: `id_account`, `ga_session_id`, `item_id`
-- `ga_session_id` — VARCHAR (відповідає BigQuery STRING)
+- Tables use plural names: `sessions`, `orders`, `products`, `accounts` (avoiding SQL keywords)
+- Do NOT rename columns: `id_account`, `ga_session_id`, `item_id`
+- `ga_session_id` — VARCHAR (matches BigQuery STRING)

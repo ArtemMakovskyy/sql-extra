@@ -1,25 +1,25 @@
-# Структура проєкту
+# Project Structure
 
-## Папки проєкту
+## Project Folders
 
-| Папка | Вміст |
+| Folder | Contents |
 |---|---|
-| [`http/`](../http/) | HTTP запити для тестування REST API (JetBrains HTTP Client) |
-| [`sql/`](../sql/) | SQL запити для виконання — 15 файлів |
-| `src/main/java/.../controller/` | REST контролери (13 файлів) |
-| `src/main/java/.../entity/` | JPA сутності (13 таблиць) |
-| `src/main/java/.../repository/` | Spring Data JPA репозиторії |
-| `src/main/java/.../service/` | Бізнес-логіка |
-| `src/main/java/.../mapper/` | MapStruct мапери Entity ↔ DTO |
-| `src/main/java/.../config/DataSeeder.java` | Генератор тестових даних |
-| [`src/main/resources/db/changelog/`](../src/main/resources/db/changelog/) | Liquibase міграції — DDL створення таблиць |
-| [`src/main/resources/static/db_schema_full.html`](../src/main/resources/static/db_schema_full.html) | Інтерактивна ERD схема |
+| [`http/`](../http/) | HTTP requests for testing REST API (JetBrains HTTP Client) |
+| [`sql/`](../sql/) | SQL queries to run — 15 files |
+| `src/main/java/.../controller/` | REST controllers (13 files) |
+| `src/main/java/.../entity/` | JPA entities (13 tables) |
+| `src/main/java/.../repository/` | Spring Data JPA repositories |
+| `src/main/java/.../service/` | Business logic |
+| `src/main/java/.../mapper/` | MapStruct Entity ↔ DTO mappers |
+| `src/main/java/.../config/DataSeeder.java` | Test data generator |
+| [`src/main/resources/db/changelog/`](../src/main/resources/db/changelog/) | Liquibase migrations — DDL table creation |
+| [`src/main/resources/static/db_schema_full.html`](../src/main/resources/static/db_schema_full.html) | Interactive ERD schema |
 
 ## REST API Endpoints
 
-У проєкті **13 контролерів** з повною CRUD логікою.
+The project has **13 controllers** with full CRUD logic.
 
-| Метод | Ендпоїнт | Контролер |
+| Method | Endpoint | Controller |
 |---|---|---|
 | `GET` | `/api/accounts` | AccountController |
 | `GET` | `/api/accounts/{id}` | AccountController |
@@ -89,10 +89,10 @@
 | `POST` | `/api/event-params` | EventParamsController |
 | `GET` | `/api/event-params/session/{gaSessionId}` | EventParamsController |
 
-## DDL створення таблиць (Liquibase міграції)
+## DDL Table Creation (Liquibase Migrations)
 
-Повний опис міграцій із таблицею всіх 13 файлів — у розділі [Схема бази даних → DDL створення таблиць](database-schema.md#ddl-створення-таблиць-liquibase-міграції).
+Full migration descriptions with a table of all 13 files — in the [Database Schema → DDL Table Creation](database-schema.md#ddl-table-creation-liquibase-migrations) section.
 
-## Технічний план проєкту
+## Technical Project Plan
 
-Повний план проєкту з описом сутностей, таблиць, DDL, Java Entity коду та черги виконання — у документі [plan.md](plan.md).
+The full project plan with entity descriptions, tables, DDL, Java Entity code, and execution order — in the [plan.md](plan.md) document.

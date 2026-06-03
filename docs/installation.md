@@ -1,44 +1,44 @@
-# Інструкція із запуску
+# Installation Guide
 
-## Вимоги
+## Requirements
 
-- **Git** — клонувати репозиторій
-- **Docker** та **Docker Compose** — запустити проєкт
+- **Git** — clone the repository
+- **Docker** and **Docker Compose** — run the project
 
-Команди виконуються в терміналі (PowerShell, cmd або bash):
+Commands are executed in the terminal (PowerShell, cmd, or bash):
 
 ```bash
 git clone https://github.com/ArtemMakovskyy/sql-extra.git
 cd sql-extra
 ```
 
-Встановити Docker:
+Install Docker:
 - [Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
 - [macOS](https://docs.docker.com/desktop/setup/install/mac-install/)
 - [Linux](https://docs.docker.com/desktop/setup/install/linux/)
 
-## Запуск
+## Startup
 
 ```bash
 docker compose up -d
 ```
 
-Після запуску:
-- PostgreSQL доступний на порту `5434`
-- Додаток доступний на `http://localhost:8080`
+After startup:
+- PostgreSQL is available on port `5434`
+- The application is available at `http://localhost:8080`
 
-## Як виконувати SQL запити через pgAdmin
+## How to Run SQL Queries via pgAdmin
 
-Відкрити **pgAdmin** у браузері: `http://localhost:5050`
+Open **pgAdmin** in the browser: `http://localhost:5050`
 
-**Логін:** `admin@admin.com`
-**Пароль:** `admin`
+**Login:** `admin@admin.com`
+**Password:** `admin`
 
-### Підключення сервера
+### Server Connection
 
 ![RegisterServer.png](../images/RegisterServer.png)
 
-Заповнити поля:
+Fill in the fields:
 - **Host:** `db-postgres`
 - **Port:** `5432`
 - **Database:** `app_db`
@@ -47,22 +47,22 @@ docker compose up -d
 - 
 ![connection.png](../images/connection.png)
 
-### Вибір бази даних
+### Selecting the Database
 
-Після підключення знайдіть базу `app_db` у списку:
+After connecting, find the `app_db` database in the list:
 ![findDbs.png](../images/findDbs.png)
 
-### Виконання запитів
+### Running Queries
 
-Відкрити **Query Tool** (правою кнопкою на `app_db` → Query Tool) і виконувати запити з папки [`../sql/`](../sql/).
+Open **Query Tool** (right-click on `app_db` → Query Tool) and run queries from the [`../sql/`](../sql/) folder.
 
-## Зупинка
+## Shutdown
 
 ```bash
 docker compose down
 ```
 
-Ця команда зупиняє та видаляє контейнери. Якщо потрібно також видалити volumes (всі дані БД):
+This command stops and removes containers. If you also need to remove volumes (all DB data):
 
 ```bash
 docker compose down -v
@@ -70,14 +70,14 @@ docker compose down -v
 
 ## Troubleshooting
 
-| Проблема | Рішення |
+| Problem | Solution |
 |---|---|
-| `port is already allocated` | Змінити порт в `docker-compose.yaml` або зупинити процес, який займає порт |
-| `app` контейнер падає | Перевірити, чи `db-postgres` запустився: `docker compose logs db-postgres` |
-| pgAdmin не підключається | Вказати Host = `db-postgres` (не `localhost`), бо контейнери в одній мережі |
-| Дані не згенерувались | Перевірити `.env` змінні; при першому запуску DataSeeder спрацьовує автоматично |
+| `port is already allocated` | Change the port in `docker-compose.yaml` or stop the process using the port |
+| `app` container crashes | Check if `db-postgres` started: `docker compose logs db-postgres` |
+| pgAdmin won't connect | Use Host = `db-postgres` (not `localhost`), because containers are on the same network |
+| Data not generated | Check `.env` variables; DataSeeder runs automatically on first startup |
 
-## Що відбувається при старті
+## What Happens on Startup
 
-1. **Liquibase** створює таблиці в БД
-2. **DataSeeder** наповнює таблиці тестовими даними
+1. **Liquibase** creates tables in the database
+2. **DataSeeder** populates tables with test data
