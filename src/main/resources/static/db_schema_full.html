@@ -132,24 +132,28 @@ const diagram = `erDiagram
     INTEGER is_unsubscribed
   }
   email_sent {
+    INTEGER id PK
     INTEGER sent_date
     INTEGER letter_type
     STRING id_message FK
     INTEGER id_account FK
   }
   email_open {
+    INTEGER id PK
     INTEGER open_date
     INTEGER letter_type
     STRING id_message FK
     INTEGER id_account FK
   }
   email_visit {
+    INTEGER id PK
     INTEGER visit_date
     INTEGER letter_type
     STRING id_message FK
     INTEGER id_account FK
   }
   order {
+    INTEGER id PK
     INTEGER ga_session_id FK
     STRING item_id FK
   }
