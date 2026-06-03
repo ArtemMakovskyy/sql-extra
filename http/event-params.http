@@ -3,37 +3,17 @@
 ### Get All Event Params
 GET {{base_url}}/api/event-params
 
-### Get Event Params by ID
-GET {{base_url}}/api/event-params/1
-
 ### Create Event Params
 POST {{base_url}}/api/event-params
 Content-Type: application/json
 
 {
-  "id": 1001,
   "gaSessionId": "ga_abc123",
   "eventDate": "2026-01-15",
   "eventTimestamp": "2026-01-15T10:30:00",
   "eventName": "page_view",
   "eventParams": "{\"page\": \"/home\", \"duration\": 120}"
 }
-
-### Update Event Params
-PUT {{base_url}}/api/event-params/1001
-Content-Type: application/json
-
-{
-  "id": 1001,
-  "gaSessionId": "ga_abc123",
-  "eventDate": "2026-01-20",
-  "eventTimestamp": "2026-01-20T14:00:00",
-  "eventName": "click",
-  "eventParams": "{\"button\": \"submit\"}"
-}
-
-### Delete Event Params
-DELETE {{base_url}}/api/event-params/1001
 
 ### Get Event Params by Session ID
 GET {{base_url}}/api/event-params/session/ga_abc123

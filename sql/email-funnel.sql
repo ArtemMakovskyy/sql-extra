@@ -10,7 +10,7 @@ SELECT
     CASE WHEN COUNT(DISTINCT es.id) > 0
          THEN ROUND(COUNT(DISTINCT ev.id)::numeric / COUNT(DISTINCT es.id)::numeric * 100, 2)
          ELSE 0 END as click_rate
-FROM accounts a
+FROM account a
 LEFT JOIN email_sent es ON a.id = es.id_account
 LEFT JOIN email_open eo ON a.id = eo.id_account
 LEFT JOIN email_visit ev ON a.id = ev.id_account
