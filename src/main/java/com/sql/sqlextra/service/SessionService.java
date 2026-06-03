@@ -1,6 +1,8 @@
 package com.sql.sqlextra.service;
 
+import com.sql.sqlextra.dto.SessionDTO;
 import com.sql.sqlextra.entity.Session;
+import com.sql.sqlextra.mapper.SessionMapper;
 import com.sql.sqlextra.repository.SessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,21 +15,19 @@ import java.util.Optional;
 public class SessionService {
 
     private final SessionRepository repository;
+    private final SessionMapper mapper;
 
-    public List<Session> findAll() {
-        return repository.findAll();
+    public List<SessionDTO> findAll() {
+        return mapper.toDTOList(repository.findAll());
     }
 
-    public Optional<Session> findById(String gaSessionId) {
-        return repository.findById(gaSessionId);
+    public Optional<SessionDTO> findById(String gaSessionId) {
+        return repository.findById(gaSessionId).map(mapper::toDTO);
     }
 
-    public Session save(Session session) {
-        return repository.save(session);
-    }
-
-    public List<Session> saveAll(List<Session> sessions) {
-        return repository.saveAll(sessions);
+    public SessionDTO save(SessionDTO dto) {
+        Session entity = mapper.toEntity(dto);
+        return mapper.toDTO(repository.save(entity));
     }
 
     public void deleteById(String gaSessionId) {
@@ -36,5 +36,10 @@ public class SessionService {
 
     public boolean existsById(String gaSessionId) {
         return repository.existsById(gaSessionId);
+    }
+
+    public List<SessionDTO> saveAll(List<SessionDTO> dtos) {
+        List<Session> entities = dtos.stream().map(mapper::toEntity).toList();
+        return mapper.toDTOList(repository.saveAll(entities));
     }
 }

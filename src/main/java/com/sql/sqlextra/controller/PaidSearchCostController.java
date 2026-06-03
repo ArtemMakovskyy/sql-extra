@@ -1,6 +1,6 @@
 package com.sql.sqlextra.controller;
 
-import com.sql.sqlextra.entity.PaidSearchCost;
+import com.sql.sqlextra.dto.PaidSearchCostDTO;
 import com.sql.sqlextra.service.PaidSearchCostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,28 +17,28 @@ public class PaidSearchCostController {
     private final PaidSearchCostService service;
 
     @GetMapping
-    public List<PaidSearchCost> findAll() {
+    public List<PaidSearchCostDTO> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{date}")
-    public ResponseEntity<PaidSearchCost> findById(@PathVariable LocalDate date) {
+    public ResponseEntity<PaidSearchCostDTO> findById(@PathVariable LocalDate date) {
         return service.findById(date)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public PaidSearchCost create(@RequestBody PaidSearchCost paidSearchCost) {
-        return service.save(paidSearchCost);
+    public PaidSearchCostDTO create(@RequestBody PaidSearchCostDTO paidSearchCostDTO) {
+        return service.save(paidSearchCostDTO);
     }
 
     @PutMapping("/{date}")
-    public ResponseEntity<PaidSearchCost> update(@PathVariable LocalDate date, @RequestBody PaidSearchCost paidSearchCost) {
+    public ResponseEntity<PaidSearchCostDTO> update(@PathVariable LocalDate date, @RequestBody PaidSearchCostDTO paidSearchCostDTO) {
         if (!service.existsById(date)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(service.save(paidSearchCost));
+        return ResponseEntity.ok(service.save(paidSearchCostDTO));
     }
 
     @DeleteMapping("/{date}")

@@ -1,6 +1,8 @@
 package com.sql.sqlextra.service;
 
+import com.sql.sqlextra.dto.OrderDTO;
 import com.sql.sqlextra.entity.OrderEntity;
+import com.sql.sqlextra.mapper.OrderMapper;
 import com.sql.sqlextra.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,21 +15,19 @@ import java.util.Optional;
 public class OrderService {
 
     private final OrderRepository repository;
+    private final OrderMapper mapper;
 
-    public List<OrderEntity> findAll() {
-        return repository.findAll();
+    public List<OrderDTO> findAll() {
+        return mapper.toDTOList(repository.findAll());
     }
 
-    public Optional<OrderEntity> findById(Long id) {
-        return repository.findById(id);
+    public Optional<OrderDTO> findById(Long id) {
+        return repository.findById(id).map(mapper::toDTO);
     }
 
-    public OrderEntity save(OrderEntity order) {
-        return repository.save(order);
-    }
-
-    public List<OrderEntity> saveAll(List<OrderEntity> orders) {
-        return repository.saveAll(orders);
+    public OrderDTO save(OrderDTO dto) {
+        OrderEntity entity = mapper.toEntity(dto);
+        return mapper.toDTO(repository.save(entity));
     }
 
     public void deleteById(Long id) {
@@ -38,15 +38,20 @@ public class OrderService {
         return repository.existsById(id);
     }
 
-    public List<OrderEntity> findByGaSessionId(String gaSessionId) {
-        return repository.findAll().stream()
-                .filter(o -> o.getGaSessionId().equals(gaSessionId))
-                .toList();
+    public List<OrderDTO> saveAll(List<OrderDTO> dtos) {
+        List<OrderEntity> entities = dtos.stream().map(mapper::toEntity).toList();
+        return mapper.toDTOList(repository.saveAll(entities));
     }
 
-    public List<OrderEntity> findByItemId(Long itemId) {
-        return repository.findAll().stream()
+    public List<OrderDTO> findByGaSessionId(String gaSessionId) {
+        return mapper.toDTOList(repository.findAll().stream()
+                .filter(o -> o.getGaSessionId().equals(gaSessionId))
+                .toList());
+    }
+
+    public List<OrderDTO> findByItemId(Long itemId) {
+        return mapper.toDTOList(repository.findAll().stream()
                 .filter(o -> o.getItemId().equals(itemId))
-                .toList();
+                .toList());
     }
 }

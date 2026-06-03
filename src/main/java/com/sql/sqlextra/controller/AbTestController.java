@@ -1,6 +1,6 @@
 package com.sql.sqlextra.controller;
 
-import com.sql.sqlextra.entity.AbTest;
+import com.sql.sqlextra.dto.AbTestDTO;
 import com.sql.sqlextra.service.AbTestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,28 +16,28 @@ public class AbTestController {
     private final AbTestService service;
 
     @GetMapping
-    public List<AbTest> findAll() {
+    public List<AbTestDTO> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AbTest> findById(@PathVariable Long id) {
+    public ResponseEntity<AbTestDTO> findById(@PathVariable Long id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public AbTest create(@RequestBody AbTest abTest) {
-        return service.save(abTest);
+    public AbTestDTO create(@RequestBody AbTestDTO abTestDTO) {
+        return service.save(abTestDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AbTest> update(@PathVariable Long id, @RequestBody AbTest abTest) {
+    public ResponseEntity<AbTestDTO> update(@PathVariable Long id, @RequestBody AbTestDTO abTestDTO) {
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(service.save(abTest));
+        return ResponseEntity.ok(service.save(abTestDTO));
     }
 
     @DeleteMapping("/{id}")
@@ -50,7 +50,7 @@ public class AbTestController {
     }
 
     @GetMapping("/session/{gaSessionId}")
-    public List<AbTest> findByGaSessionId(@PathVariable String gaSessionId) {
+    public List<AbTestDTO> findByGaSessionId(@PathVariable String gaSessionId) {
         return service.findByGaSessionId(gaSessionId);
     }
 }

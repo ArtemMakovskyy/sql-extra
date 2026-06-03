@@ -1,6 +1,8 @@
 package com.sql.sqlextra.service;
 
+import com.sql.sqlextra.dto.AbTestDTO;
 import com.sql.sqlextra.entity.AbTest;
+import com.sql.sqlextra.mapper.AbTestMapper;
 import com.sql.sqlextra.repository.AbTestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,21 +15,19 @@ import java.util.Optional;
 public class AbTestService {
 
     private final AbTestRepository repository;
+    private final AbTestMapper mapper;
 
-    public List<AbTest> findAll() {
-        return repository.findAll();
+    public List<AbTestDTO> findAll() {
+        return mapper.toDTOList(repository.findAll());
     }
 
-    public Optional<AbTest> findById(Long id) {
-        return repository.findById(id);
+    public Optional<AbTestDTO> findById(Long id) {
+        return repository.findById(id).map(mapper::toDTO);
     }
 
-    public AbTest save(AbTest abTest) {
-        return repository.save(abTest);
-    }
-
-    public List<AbTest> saveAll(List<AbTest> abTests) {
-        return repository.saveAll(abTests);
+    public AbTestDTO save(AbTestDTO dto) {
+        AbTest entity = mapper.toEntity(dto);
+        return mapper.toDTO(repository.save(entity));
     }
 
     public void deleteById(Long id) {
@@ -38,9 +38,14 @@ public class AbTestService {
         return repository.existsById(id);
     }
 
-    public List<AbTest> findByGaSessionId(String gaSessionId) {
-        return repository.findAll().stream()
+    public List<AbTestDTO> saveAll(List<AbTestDTO> dtos) {
+        List<AbTest> entities = dtos.stream().map(mapper::toEntity).toList();
+        return mapper.toDTOList(repository.saveAll(entities));
+    }
+
+    public List<AbTestDTO> findByGaSessionId(String gaSessionId) {
+        return mapper.toDTOList(repository.findAll().stream()
                 .filter(ab -> ab.getGaSessionId().equals(gaSessionId))
-                .toList();
+                .toList());
     }
 }

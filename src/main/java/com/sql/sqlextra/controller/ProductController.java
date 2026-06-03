@@ -1,8 +1,6 @@
 package com.sql.sqlextra.controller;
 
 import com.sql.sqlextra.dto.ProductDTO;
-import com.sql.sqlextra.entity.Product;
-import com.sql.sqlextra.mapper.ProductMapper;
 import com.sql.sqlextra.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,24 +14,22 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService service;
-    private final ProductMapper productMapper;
 
     @GetMapping
     public List<ProductDTO> findAll() {
-        return productMapper.toDTOList(service.findAll());
+        return service.findAll();
     }
 
     @GetMapping("/{itemId}")
     public ResponseEntity<ProductDTO> findById(@PathVariable Long itemId) {
         return service.findById(itemId)
-                .map(product -> ResponseEntity.ok(productMapper.toDTO(product)))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ProductDTO create(@RequestBody ProductDTO productDTO) {
-        Product product = productMapper.toEntity(productDTO);
-        return productMapper.toDTO(service.save(product));
+        return service.save(productDTO);
     }
 
     @PutMapping("/{itemId}")
@@ -41,8 +37,7 @@ public class ProductController {
         if (!service.existsById(itemId)) {
             return ResponseEntity.notFound().build();
         }
-        Product product = productMapper.toEntity(productDTO);
-        return ResponseEntity.ok(productMapper.toDTO(service.save(product)));
+        return ResponseEntity.ok(service.save(productDTO));
     }
 
     @DeleteMapping("/{itemId}")

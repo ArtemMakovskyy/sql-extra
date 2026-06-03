@@ -1,6 +1,6 @@
 package com.sql.sqlextra.controller;
 
-import com.sql.sqlextra.entity.EventParams;
+import com.sql.sqlextra.dto.EventParamsDTO;
 import com.sql.sqlextra.service.EventParamsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,28 +16,28 @@ public class EventParamsController {
     private final EventParamsService service;
 
     @GetMapping
-    public List<EventParams> findAll() {
+    public List<EventParamsDTO> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventParams> findById(@PathVariable Long id) {
+    public ResponseEntity<EventParamsDTO> findById(@PathVariable Long id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public EventParams create(@RequestBody EventParams eventParams) {
-        return service.save(eventParams);
+    public EventParamsDTO create(@RequestBody EventParamsDTO eventParamsDTO) {
+        return service.save(eventParamsDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EventParams> update(@PathVariable Long id, @RequestBody EventParams eventParams) {
+    public ResponseEntity<EventParamsDTO> update(@PathVariable Long id, @RequestBody EventParamsDTO eventParamsDTO) {
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(service.save(eventParams));
+        return ResponseEntity.ok(service.save(eventParamsDTO));
     }
 
     @DeleteMapping("/{id}")
@@ -50,7 +50,7 @@ public class EventParamsController {
     }
 
     @GetMapping("/session/{gaSessionId}")
-    public List<EventParams> findByGaSessionId(@PathVariable String gaSessionId) {
+    public List<EventParamsDTO> findByGaSessionId(@PathVariable String gaSessionId) {
         return service.findByGaSessionId(gaSessionId);
     }
 }

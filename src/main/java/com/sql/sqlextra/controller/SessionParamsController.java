@@ -1,6 +1,6 @@
 package com.sql.sqlextra.controller;
 
-import com.sql.sqlextra.entity.SessionParams;
+import com.sql.sqlextra.dto.SessionParamsDTO;
 import com.sql.sqlextra.service.SessionParamsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,28 +16,28 @@ public class SessionParamsController {
     private final SessionParamsService service;
 
     @GetMapping
-    public List<SessionParams> findAll() {
+    public List<SessionParamsDTO> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{gaSessionId}")
-    public ResponseEntity<SessionParams> findById(@PathVariable String gaSessionId) {
+    public ResponseEntity<SessionParamsDTO> findById(@PathVariable String gaSessionId) {
         return service.findById(gaSessionId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public SessionParams create(@RequestBody SessionParams sessionParams) {
-        return service.save(sessionParams);
+    public SessionParamsDTO create(@RequestBody SessionParamsDTO sessionParamsDTO) {
+        return service.save(sessionParamsDTO);
     }
 
     @PutMapping("/{gaSessionId}")
-    public ResponseEntity<SessionParams> update(@PathVariable String gaSessionId, @RequestBody SessionParams sessionParams) {
+    public ResponseEntity<SessionParamsDTO> update(@PathVariable String gaSessionId, @RequestBody SessionParamsDTO sessionParamsDTO) {
         if (!service.existsById(gaSessionId)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(service.save(sessionParams));
+        return ResponseEntity.ok(service.save(sessionParamsDTO));
     }
 
     @DeleteMapping("/{gaSessionId}")

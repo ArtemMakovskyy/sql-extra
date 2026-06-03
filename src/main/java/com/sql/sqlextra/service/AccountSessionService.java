@@ -1,7 +1,9 @@
 package com.sql.sqlextra.service;
 
+import com.sql.sqlextra.dto.AccountSessionDTO;
 import com.sql.sqlextra.entity.AccountSession;
 import com.sql.sqlextra.entity.AccountSessionId;
+import com.sql.sqlextra.mapper.AccountSessionMapper;
 import com.sql.sqlextra.repository.AccountSessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,21 +16,19 @@ import java.util.Optional;
 public class AccountSessionService {
 
     private final AccountSessionRepository repository;
+    private final AccountSessionMapper mapper;
 
-    public List<AccountSession> findAll() {
-        return repository.findAll();
+    public List<AccountSessionDTO> findAll() {
+        return mapper.toDTOList(repository.findAll());
     }
 
-    public Optional<AccountSession> findById(AccountSessionId id) {
-        return repository.findById(id);
+    public Optional<AccountSessionDTO> findById(AccountSessionId id) {
+        return repository.findById(id).map(mapper::toDTO);
     }
 
-    public AccountSession save(AccountSession accountSession) {
-        return repository.save(accountSession);
-    }
-
-    public List<AccountSession> saveAll(List<AccountSession> accountSessions) {
-        return repository.saveAll(accountSessions);
+    public AccountSessionDTO save(AccountSessionDTO dto) {
+        AccountSession entity = mapper.toEntity(dto);
+        return mapper.toDTO(repository.save(entity));
     }
 
     public void deleteById(AccountSessionId id) {
@@ -39,15 +39,20 @@ public class AccountSessionService {
         return repository.existsById(id);
     }
 
-    public List<AccountSession> findByAccountId(Long accountId) {
-        return repository.findAll().stream()
-                .filter(as -> as.getId().getAccountId().equals(accountId))
-                .toList();
+    public List<AccountSessionDTO> saveAll(List<AccountSessionDTO> dtos) {
+        List<AccountSession> entities = dtos.stream().map(mapper::toEntity).toList();
+        return mapper.toDTOList(repository.saveAll(entities));
     }
 
-    public List<AccountSession> findByGaSessionId(String gaSessionId) {
-        return repository.findAll().stream()
+    public List<AccountSessionDTO> findByAccountId(Long accountId) {
+        return mapper.toDTOList(repository.findAll().stream()
+                .filter(as -> as.getId().getAccountId().equals(accountId))
+                .toList());
+    }
+
+    public List<AccountSessionDTO> findByGaSessionId(String gaSessionId) {
+        return mapper.toDTOList(repository.findAll().stream()
                 .filter(as -> as.getId().getGaSessionId().equals(gaSessionId))
-                .toList();
+                .toList());
     }
 }

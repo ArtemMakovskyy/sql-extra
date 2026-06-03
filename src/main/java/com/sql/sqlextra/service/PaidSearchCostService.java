@@ -1,6 +1,8 @@
 package com.sql.sqlextra.service;
 
+import com.sql.sqlextra.dto.PaidSearchCostDTO;
 import com.sql.sqlextra.entity.PaidSearchCost;
+import com.sql.sqlextra.mapper.PaidSearchCostMapper;
 import com.sql.sqlextra.repository.PaidSearchCostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,21 +16,19 @@ import java.util.Optional;
 public class PaidSearchCostService {
 
     private final PaidSearchCostRepository repository;
+    private final PaidSearchCostMapper mapper;
 
-    public List<PaidSearchCost> findAll() {
-        return repository.findAll();
+    public List<PaidSearchCostDTO> findAll() {
+        return mapper.toDTOList(repository.findAll());
     }
 
-    public Optional<PaidSearchCost> findById(LocalDate date) {
-        return repository.findById(date);
+    public Optional<PaidSearchCostDTO> findById(LocalDate date) {
+        return repository.findById(date).map(mapper::toDTO);
     }
 
-    public PaidSearchCost save(PaidSearchCost paidSearchCost) {
-        return repository.save(paidSearchCost);
-    }
-
-    public List<PaidSearchCost> saveAll(List<PaidSearchCost> costs) {
-        return repository.saveAll(costs);
+    public PaidSearchCostDTO save(PaidSearchCostDTO dto) {
+        PaidSearchCost entity = mapper.toEntity(dto);
+        return mapper.toDTO(repository.save(entity));
     }
 
     public void deleteById(LocalDate date) {
@@ -37,5 +37,10 @@ public class PaidSearchCostService {
 
     public boolean existsById(LocalDate date) {
         return repository.existsById(date);
+    }
+
+    public List<PaidSearchCostDTO> saveAll(List<PaidSearchCostDTO> dtos) {
+        List<PaidSearchCost> entities = dtos.stream().map(mapper::toEntity).toList();
+        return mapper.toDTOList(repository.saveAll(entities));
     }
 }

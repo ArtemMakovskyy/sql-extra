@@ -1,8 +1,6 @@
 package com.sql.sqlextra.controller;
 
 import com.sql.sqlextra.dto.EmailOpenDTO;
-import com.sql.sqlextra.entity.EmailOpen;
-import com.sql.sqlextra.mapper.EmailOpenMapper;
 import com.sql.sqlextra.service.EmailOpenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,24 +14,22 @@ import java.util.List;
 public class EmailOpenController {
 
     private final EmailOpenService service;
-    private final EmailOpenMapper emailOpenMapper;
 
     @GetMapping
     public List<EmailOpenDTO> findAll() {
-        return emailOpenMapper.toDTOList(service.findAll());
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EmailOpenDTO> findById(@PathVariable Long id) {
         return service.findById(id)
-                .map(emailOpen -> ResponseEntity.ok(emailOpenMapper.toDTO(emailOpen)))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public EmailOpenDTO create(@RequestBody EmailOpenDTO emailOpenDTO) {
-        EmailOpen emailOpen = emailOpenMapper.toEntity(emailOpenDTO);
-        return emailOpenMapper.toDTO(service.save(emailOpen));
+        return service.save(emailOpenDTO);
     }
 
     @PutMapping("/{id}")
@@ -41,8 +37,7 @@ public class EmailOpenController {
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        EmailOpen emailOpen = emailOpenMapper.toEntity(emailOpenDTO);
-        return ResponseEntity.ok(emailOpenMapper.toDTO(service.save(emailOpen)));
+        return ResponseEntity.ok(service.save(emailOpenDTO));
     }
 
     @DeleteMapping("/{id}")
@@ -56,6 +51,6 @@ public class EmailOpenController {
 
     @GetMapping("/account/{idAccount}")
     public List<EmailOpenDTO> findByIdAccount(@PathVariable Long idAccount) {
-        return emailOpenMapper.toDTOList(service.findByIdAccount(idAccount));
+        return service.findByIdAccount(idAccount);
     }
 }

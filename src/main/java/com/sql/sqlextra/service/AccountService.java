@@ -1,6 +1,8 @@
 package com.sql.sqlextra.service;
 
+import com.sql.sqlextra.dto.AccountDTO;
 import com.sql.sqlextra.entity.Account;
+import com.sql.sqlextra.mapper.AccountMapper;
 import com.sql.sqlextra.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,21 +15,19 @@ import java.util.Optional;
 public class AccountService {
 
     private final AccountRepository repository;
+    private final AccountMapper mapper;
 
-    public List<Account> findAll() {
-        return repository.findAll();
+    public List<AccountDTO> findAll() {
+        return mapper.toDTOList(repository.findAll());
     }
 
-    public Optional<Account> findById(Long id) {
-        return repository.findById(id);
+    public Optional<AccountDTO> findById(Long id) {
+        return repository.findById(id).map(mapper::toDTO);
     }
 
-    public Account save(Account account) {
-        return repository.save(account);
-    }
-
-    public List<Account> saveAll(List<Account> accounts) {
-        return repository.saveAll(accounts);
+    public AccountDTO save(AccountDTO dto) {
+        Account entity = mapper.toEntity(dto);
+        return mapper.toDTO(repository.save(entity));
     }
 
     public void deleteById(Long id) {
@@ -36,5 +36,10 @@ public class AccountService {
 
     public boolean existsById(Long id) {
         return repository.existsById(id);
+    }
+
+    public List<AccountDTO> saveAll(List<AccountDTO> dtos) {
+        List<Account> entities = dtos.stream().map(mapper::toEntity).toList();
+        return mapper.toDTOList(repository.saveAll(entities));
     }
 }

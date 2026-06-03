@@ -1,6 +1,8 @@
 package com.sql.sqlextra.service;
 
+import com.sql.sqlextra.dto.RevenuePredictDTO;
 import com.sql.sqlextra.entity.RevenuePredict;
+import com.sql.sqlextra.mapper.RevenuePredictMapper;
 import com.sql.sqlextra.repository.RevenuePredictRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,21 +16,19 @@ import java.util.Optional;
 public class RevenuePredictService {
 
     private final RevenuePredictRepository repository;
+    private final RevenuePredictMapper mapper;
 
-    public List<RevenuePredict> findAll() {
-        return repository.findAll();
+    public List<RevenuePredictDTO> findAll() {
+        return mapper.toDTOList(repository.findAll());
     }
 
-    public Optional<RevenuePredict> findById(LocalDate date) {
-        return repository.findById(date);
+    public Optional<RevenuePredictDTO> findById(LocalDate date) {
+        return repository.findById(date).map(mapper::toDTO);
     }
 
-    public RevenuePredict save(RevenuePredict revenuePredict) {
-        return repository.save(revenuePredict);
-    }
-
-    public List<RevenuePredict> saveAll(List<RevenuePredict> predicts) {
-        return repository.saveAll(predicts);
+    public RevenuePredictDTO save(RevenuePredictDTO dto) {
+        RevenuePredict entity = mapper.toEntity(dto);
+        return mapper.toDTO(repository.save(entity));
     }
 
     public void deleteById(LocalDate date) {
@@ -37,5 +37,10 @@ public class RevenuePredictService {
 
     public boolean existsById(LocalDate date) {
         return repository.existsById(date);
+    }
+
+    public List<RevenuePredictDTO> saveAll(List<RevenuePredictDTO> dtos) {
+        List<RevenuePredict> entities = dtos.stream().map(mapper::toEntity).toList();
+        return mapper.toDTOList(repository.saveAll(entities));
     }
 }

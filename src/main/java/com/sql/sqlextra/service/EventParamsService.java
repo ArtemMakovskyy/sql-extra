@@ -1,6 +1,8 @@
 package com.sql.sqlextra.service;
 
+import com.sql.sqlextra.dto.EventParamsDTO;
 import com.sql.sqlextra.entity.EventParams;
+import com.sql.sqlextra.mapper.EventParamsMapper;
 import com.sql.sqlextra.repository.EventParamsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,21 +15,19 @@ import java.util.Optional;
 public class EventParamsService {
 
     private final EventParamsRepository repository;
+    private final EventParamsMapper mapper;
 
-    public List<EventParams> findAll() {
-        return repository.findAll();
+    public List<EventParamsDTO> findAll() {
+        return mapper.toDTOList(repository.findAll());
     }
 
-    public Optional<EventParams> findById(Long id) {
-        return repository.findById(id);
+    public Optional<EventParamsDTO> findById(Long id) {
+        return repository.findById(id).map(mapper::toDTO);
     }
 
-    public EventParams save(EventParams eventParams) {
-        return repository.save(eventParams);
-    }
-
-    public List<EventParams> saveAll(List<EventParams> events) {
-        return repository.saveAll(events);
+    public EventParamsDTO save(EventParamsDTO dto) {
+        EventParams entity = mapper.toEntity(dto);
+        return mapper.toDTO(repository.save(entity));
     }
 
     public void deleteById(Long id) {
@@ -38,9 +38,14 @@ public class EventParamsService {
         return repository.existsById(id);
     }
 
-    public List<EventParams> findByGaSessionId(String gaSessionId) {
-        return repository.findAll().stream()
+    public List<EventParamsDTO> saveAll(List<EventParamsDTO> dtos) {
+        List<EventParams> entities = dtos.stream().map(mapper::toEntity).toList();
+        return mapper.toDTOList(repository.saveAll(entities));
+    }
+
+    public List<EventParamsDTO> findByGaSessionId(String gaSessionId) {
+        return mapper.toDTOList(repository.findAll().stream()
                 .filter(ep -> ep.getGaSessionId().equals(gaSessionId))
-                .toList();
+                .toList());
     }
 }

@@ -1,9 +1,7 @@
 package com.sql.sqlextra.controller;
 
 import com.sql.sqlextra.dto.AccountSessionDTO;
-import com.sql.sqlextra.entity.AccountSession;
 import com.sql.sqlextra.entity.AccountSessionId;
-import com.sql.sqlextra.mapper.AccountSessionMapper;
 import com.sql.sqlextra.service.AccountSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +15,10 @@ import java.util.List;
 public class AccountSessionController {
 
     private final AccountSessionService service;
-    private final AccountSessionMapper accountSessionMapper;
 
     @GetMapping
     public List<AccountSessionDTO> findAll() {
-        return accountSessionMapper.toDTOList(service.findAll());
+        return service.findAll();
     }
 
     @GetMapping("/{accountId}/{gaSessionId}")
@@ -30,14 +27,13 @@ public class AccountSessionController {
             @PathVariable String gaSessionId) {
         AccountSessionId id = new AccountSessionId(accountId, gaSessionId);
         return service.findById(id)
-                .map(session -> ResponseEntity.ok(accountSessionMapper.toDTO(session)))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public AccountSessionDTO create(@RequestBody AccountSessionDTO accountSessionDTO) {
-        AccountSession session = accountSessionMapper.toEntity(accountSessionDTO);
-        return accountSessionMapper.toDTO(service.save(session));
+        return service.save(accountSessionDTO);
     }
 
     @DeleteMapping("/{accountId}/{gaSessionId}")
@@ -54,11 +50,11 @@ public class AccountSessionController {
 
     @GetMapping("/account/{accountId}")
     public List<AccountSessionDTO> findByAccountId(@PathVariable Long accountId) {
-        return accountSessionMapper.toDTOList(service.findByAccountId(accountId));
+        return service.findByAccountId(accountId);
     }
 
     @GetMapping("/session/{gaSessionId}")
     public List<AccountSessionDTO> findByGaSessionId(@PathVariable String gaSessionId) {
-        return accountSessionMapper.toDTOList(service.findByGaSessionId(gaSessionId));
+        return service.findByGaSessionId(gaSessionId);
     }
 }

@@ -1,6 +1,8 @@
 package com.sql.sqlextra.service;
 
+import com.sql.sqlextra.dto.EmailVisitDTO;
 import com.sql.sqlextra.entity.EmailVisit;
+import com.sql.sqlextra.mapper.EmailVisitMapper;
 import com.sql.sqlextra.repository.EmailVisitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,21 +15,19 @@ import java.util.Optional;
 public class EmailVisitService {
 
     private final EmailVisitRepository repository;
+    private final EmailVisitMapper mapper;
 
-    public List<EmailVisit> findAll() {
-        return repository.findAll();
+    public List<EmailVisitDTO> findAll() {
+        return mapper.toDTOList(repository.findAll());
     }
 
-    public Optional<EmailVisit> findById(Long id) {
-        return repository.findById(id);
+    public Optional<EmailVisitDTO> findById(Long id) {
+        return repository.findById(id).map(mapper::toDTO);
     }
 
-    public EmailVisit save(EmailVisit emailVisit) {
-        return repository.save(emailVisit);
-    }
-
-    public List<EmailVisit> saveAll(List<EmailVisit> emailVisits) {
-        return repository.saveAll(emailVisits);
+    public EmailVisitDTO save(EmailVisitDTO dto) {
+        EmailVisit entity = mapper.toEntity(dto);
+        return mapper.toDTO(repository.save(entity));
     }
 
     public void deleteById(Long id) {
@@ -38,9 +38,14 @@ public class EmailVisitService {
         return repository.existsById(id);
     }
 
-    public List<EmailVisit> findByIdAccount(Long idAccount) {
-        return repository.findAll().stream()
+    public List<EmailVisitDTO> saveAll(List<EmailVisitDTO> dtos) {
+        List<EmailVisit> entities = dtos.stream().map(mapper::toEntity).toList();
+        return mapper.toDTOList(repository.saveAll(entities));
+    }
+
+    public List<EmailVisitDTO> findByIdAccount(Long idAccount) {
+        return mapper.toDTOList(repository.findAll().stream()
                 .filter(e -> e.getIdAccount().equals(idAccount))
-                .toList();
+                .toList());
     }
 }

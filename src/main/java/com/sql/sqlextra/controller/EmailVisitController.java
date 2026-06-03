@@ -1,8 +1,6 @@
 package com.sql.sqlextra.controller;
 
 import com.sql.sqlextra.dto.EmailVisitDTO;
-import com.sql.sqlextra.entity.EmailVisit;
-import com.sql.sqlextra.mapper.EmailVisitMapper;
 import com.sql.sqlextra.service.EmailVisitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,24 +14,22 @@ import java.util.List;
 public class EmailVisitController {
 
     private final EmailVisitService service;
-    private final EmailVisitMapper emailVisitMapper;
 
     @GetMapping
     public List<EmailVisitDTO> findAll() {
-        return emailVisitMapper.toDTOList(service.findAll());
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EmailVisitDTO> findById(@PathVariable Long id) {
         return service.findById(id)
-                .map(emailVisit -> ResponseEntity.ok(emailVisitMapper.toDTO(emailVisit)))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public EmailVisitDTO create(@RequestBody EmailVisitDTO emailVisitDTO) {
-        EmailVisit emailVisit = emailVisitMapper.toEntity(emailVisitDTO);
-        return emailVisitMapper.toDTO(service.save(emailVisit));
+        return service.save(emailVisitDTO);
     }
 
     @PutMapping("/{id}")
@@ -41,8 +37,7 @@ public class EmailVisitController {
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        EmailVisit emailVisit = emailVisitMapper.toEntity(emailVisitDTO);
-        return ResponseEntity.ok(emailVisitMapper.toDTO(service.save(emailVisit)));
+        return ResponseEntity.ok(service.save(emailVisitDTO));
     }
 
     @DeleteMapping("/{id}")
@@ -56,6 +51,6 @@ public class EmailVisitController {
 
     @GetMapping("/account/{idAccount}")
     public List<EmailVisitDTO> findByIdAccount(@PathVariable Long idAccount) {
-        return emailVisitMapper.toDTOList(service.findByIdAccount(idAccount));
+        return service.findByIdAccount(idAccount);
     }
 }
