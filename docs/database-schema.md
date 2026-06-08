@@ -18,18 +18,18 @@ erDiagram
   order }o--|| product : "many to 1"
 
   session {
-    INTEGER ga_session_id PK
-    STRING date
+    STRING ga_session_id PK
+    DATE date
   }
   event_params {
-    STRING event_date
-    INTEGER ga_session_id FK
-    INTEGER event_timestamp
+    STRING ga_session_id FK
+    TIMESTAMP event_timestamp
+    DATE event_date
     STRING event_name
-    RECORD event_params
+    JSONB event_params
   }
   session_params {
-    INTEGER ga_session_id FK
+    STRING ga_session_id FK
     STRING device
     STRING mobile_model_name
     STRING operating_system
@@ -42,60 +42,60 @@ erDiagram
     STRING channel
   }
   ab_test {
-    INTEGER ga_session_id FK
+    STRING ga_session_id FK
     INTEGER test
     INTEGER test_group
   }
   account_session {
-    INTEGER account_id FK
-    INTEGER ga_session_id FK
+    BIGINT account_id FK
+    STRING ga_session_id FK
   }
   account {
-    INTEGER id PK
+    BIGINT id PK
     INTEGER send_interval
     INTEGER is_verified
     INTEGER is_unsubscribed
   }
   email_sent {
-    INTEGER id PK
+    BIGINT id PK
     INTEGER sent_date
     INTEGER letter_type
     STRING id_message FK
-    INTEGER id_account FK
+    BIGINT id_account FK
   }
   email_open {
-    INTEGER id PK
+    BIGINT id PK
     INTEGER open_date
     INTEGER letter_type
     STRING id_message FK
-    INTEGER id_account FK
+    BIGINT id_account FK
   }
   email_visit {
-    INTEGER id PK
+    BIGINT id PK
     INTEGER visit_date
     INTEGER letter_type
     STRING id_message FK
-    INTEGER id_account FK
+    BIGINT id_account FK
   }
   order {
-    INTEGER id PK
-    INTEGER ga_session_id FK
-    STRING item_id FK
+    BIGINT id PK
+    STRING ga_session_id FK
+    BIGINT item_id FK
   }
   product {
-    STRING item_id PK
+    BIGINT item_id PK
     STRING name
     STRING category
-    FLOAT price
+    DECIMAL price
     STRING short_description
   }
   revenue_predict {
-    STRING date PK
-    FLOAT predict
+    DATE date PK
+    DECIMAL predict
   }
   paid_search_cost {
-    STRING date PK
-    FLOAT cost
+    DATE date PK
+    DECIMAL cost
   }
 ```
 
