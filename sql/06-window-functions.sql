@@ -174,3 +174,16 @@ FROM (
 ) ranked
 WHERE sent_day_rank <= 10
 ORDER BY account_id, sent_day_rank;
+
+-- 13. Continents and countries
+SELECT
+    continent,
+    country,
+    COUNT(*) AS session_count,
+    ROW_NUMBER() OVER (
+        PARTITION BY continent
+        ORDER BY country
+        ) AS country_number
+FROM session_params
+GROUP BY continent, country
+ORDER BY continent, country;

@@ -13,8 +13,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -121,12 +123,14 @@ public class DataSeeder implements CommandLineRunner {
         String[] devices = {"desktop", "mobile", "tablet"};
         String[] browsers = {"Chrome", "Firefox", "Safari", "Edge"};
         String[] operatingSystems = {"Windows", "macOS", "Linux", "Android", "iOS"};
-        String[] continents = {"Europe", "North America", "Asia", "South America", "Africa", "Oceania"};
-        String[] countries = {
-            "United States", "United Kingdom", "Germany", "France", "Canada",
-            "Australia", "Japan", "Italy", "Spain", "Netherlands", "Brazil",
-            "India", "China", "South Korea", "Mexico"
-        };
+        Map<String, String[]> continentsToCountries = new LinkedHashMap<>();
+        continentsToCountries.put("Europe", new String[]{"United Kingdom", "Germany", "France", "Italy", "Spain", "Netherlands"});
+        continentsToCountries.put("North America", new String[]{"United States", "Canada", "Mexico"});
+        continentsToCountries.put("Asia", new String[]{"Japan", "India", "China", "South Korea"});
+        continentsToCountries.put("South America", new String[]{"Brazil"});
+        continentsToCountries.put("Oceania", new String[]{"Australia"});
+        continentsToCountries.put("Africa", new String[]{"South Africa", "Egypt", "Nigeria", "Kenya"});
+        String[] continentNames = continentsToCountries.keySet().toArray(new String[0]);
         String[] mediums = {"organic", "paid", "social", "email", "referral"};
         String[] channels = {"Organic Search", "Paid Search", "Social", "Direct", "Referral"};
 
@@ -145,8 +149,10 @@ public class DataSeeder implements CommandLineRunner {
                 params.setLanguage("en-" + faker.address().countryCode());
             }
 
-            params.setContinent(continents[random.nextInt(continents.length)]);
-            params.setCountry(countries[random.nextInt(countries.length)]);
+            String continent = continentNames[random.nextInt(continentNames.length)];
+            params.setContinent(continent);
+            String[] continentCountries = continentsToCountries.get(continent);
+            params.setCountry(continentCountries[random.nextInt(continentCountries.length)]);
             params.setMedium(mediums[random.nextInt(mediums.length)]);
             params.setChannel(channels[random.nextInt(channels.length)]);
             if (random.nextBoolean()) {
