@@ -52,4 +52,4 @@ ORDER BY date;
 
 COMMIT;
 
--- После COMMIT таблицы tmp_daily_revenue уже не существует.
+-- After COMMIT, the tmp_daily_revenue table no longer exists.

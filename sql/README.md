@@ -1,31 +1,43 @@
-# SQL Queries — 15 файлів
+# SQL Queries — 23 files
 
-Набір SQL запитів, що демонструють різні конструкції та підходи.
+A collection of SQL queries demonstrating various constructs and approaches.
 
-## Навчальні запити (01–08)
+## Learning queries (01–08)
 
-Від базових конструкцій до складніших — прогресія складності:
+From basic constructs to more complex — progression of difficulty:
 
-| Файл | Тема | Конструкції |
+| File | Topic | Constructs |
 |---|---|---|
-| [`01-basic.sql`](01-basic.sql) | Базові SELECT, JOIN, агрегація | `JOIN`, `GROUP BY`, `HAVING`, `COUNT`, `LIMIT` |
-| [`02-case-when.sql`](02-case-when.sql) | CASE WHEN умови | `CASE`, `WHEN`, `THEN`, `ELSE`, `END`, агрегація з умовами |
-| [`03-union.sql`](03-union.sql) | UNION / UNION ALL | `UNION ALL`, комбінування результатів різних запитів |
-| [`04-subquery.sql`](04-subquery.sql) | Підзапити | Підзапити в `FROM`, `WHERE`, скалярні підзапити |
-| [`05-data.sql`](05-data.sql) | Робота з датами | `EXTRACT`, `+ interval`, `BETWEEN`, `DATE_TRUNC`, `age()` |
-| [`06-window-functions.sql`](06-window-functions.sql) | Віконні функції | `ROW_NUMBER()`, `RANK()`, `SUM() OVER`, `PARTITION BY` |
-| [`07-cte.sql`](07-cte.sql) | Common Table Expressions | `WITH`, рекурсивні та нерекурсивні CTE |
-| [`08_1-view.sql`](08_1-view.sql) | Представлення (VIEW) | `CREATE OR REPLACE VIEW`, `WITH` у VIEW |
-| [`08_2-temp.sql`](08_2-temp.sql) | Тимчасові таблиці | `CREATE TEMP TABLE`, `DROP TABLE` |
+| [`01-basic.sql`](01-basic.sql) | Basic SELECT, JOIN, aggregation | `JOIN`, `GROUP BY`, `HAVING`, `COUNT`, `LIMIT` |
+| [`02-case-when.sql`](02-case-when.sql) | CASE WHEN conditions | `CASE`, `WHEN`, `THEN`, `ELSE`, `END`, conditional aggregation |
+| [`03-union.sql`](03-union.sql) | UNION / UNION ALL | `UNION ALL`, combining results from different queries |
+| [`04-subquery.sql`](04-subquery.sql) | Subqueries (overview) | See subfiles 04_1–04_5 |
+| [`04_1-subquery_select.sql`](04_1-subquery_select.sql) | Subquery in SELECT | Scalar subqueries in SELECT |
+| [`04_2-subquery_from.sql`](04_2-subquery_from.sql) | Subquery in FROM | Derived tables, subqueries as source |
+| [`04_3-subquery_where.sql`](04_3-subquery_where.sql) | Subquery in WHERE | `IN`, `EXISTS`, comparison with subquery |
+| [`04_4-subquery_having.sql`](04_4-subquery_having.sql) | Subquery in HAVING | Filtering groups by subquery result |
+| [`04_5-subquery_join.sql`](04_5-subquery_join.sql) | Subquery in JOIN | Joining with subquery result |
+| [`05-data.sql`](05-data.sql) | Working with dates | `EXTRACT`, `+ interval`, `BETWEEN`, `DATE_TRUNC` |
+| [`06-window-functions.sql`](06-window-functions.sql) | Window functions | `ROW_NUMBER()`, `RANK()`, `SUM() OVER`, `PARTITION BY` |
+| [`06_0-window-functions-overview.sql`](06_0-window-functions-overview.sql) | Window functions overview | `ROW_NUMBER`, `RANK`, `DENSE_RANK`, `LAG`, `LEAD` |
+| [`07-cte.sql`](07-cte.sql) | Common Table Expressions | `WITH`, recursive and non-recursive CTE |
+| [`08_1-view.sql`](08_1-view.sql) | Views (VIEW) | `CREATE OR REPLACE VIEW`, `WITH` in VIEW |
+| [`08_2-temp.sql`](08_2-temp.sql) | Temporary tables | `CREATE TEMP TABLE`, `DROP TABLE` |
 
-## Аналітичні запити
+## Analytical queries
 
-Реалістичні сценарії веб-аналітики:
+Real-world web analytics scenarios:
 
-| Файл | Опис |
+| File | Description |
 |---|---|
-| [`analytics.sql`](analytics.sql) | Аналітика: сесії за типами пристроїв, канали трафіку, A/B тести |
-| [`email-funnel.sql`](email-funnel.sql) | Email-воронка: надіслано → відкрито → клікнуто |
-| [`orders.sql`](orders.sql) | Замовлення: кількість товарів, суми за сесіями |
-| [`products.sql`](products.sql) | Товари: всі товари, фільтрація за категорією |
-| [`sessions.sql`](sessions.sql) | Сесії: всі сесії, фільтрація за датою, кількість подій |
+| [`analytics.sql`](analytics.sql) | Sessions by device type, country, browser, channel |
+| [`email-funnel.sql`](email-funnel.sql) | Email funnel per account: sent → opened → clicked |
+| [`orders.sql`](orders.sql) | Orders count by product, revenue by product, orders by session |
+| [`products.sql`](products.sql) | All products, filter by category, price range, top expensive |
+| [`sessions.sql`](sessions.sql) | All sessions, filter by date, join with session_params |
+
+## Other
+
+| File | Description |
+|---|---|
+| [`09-ab.sql`](09-ab.sql) | A/B testing analysis: sessions, events, orders, new accounts by test groups |

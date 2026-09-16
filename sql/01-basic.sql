@@ -77,3 +77,13 @@ JOIN session_params sp ON s.ga_session_id = sp.ga_session_id
 LEFT JOIN orders o ON s.ga_session_id = o.ga_session_id
 GROUP BY sp.country
 ORDER BY session_cnt DESC;
+
+-- 8. Sessions by Language Type (en-)
+SELECT
+  SUBSTRING(language FROM length(language) - 1 FOR 2) AS en_type,
+  COUNT(ga_session_id) AS session_cnt
+FROM session_params
+WHERE language IS NOT NULL
+  AND language LIKE 'en-%'
+GROUP BY en_type
+ORDER BY session_cnt DESC;

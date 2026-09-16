@@ -25,13 +25,23 @@ FROM session_params
 GROUP BY browser
 ORDER BY session_cnt DESC;
 
--- 3. Emails Sent to Unsubscribed by Country
-SELECT sp.country,
-    COUNT(DISTINCT es.id_message) AS sent_cnt
-FROM email_sent es
-JOIN account a ON es.id_account = a.id
-JOIN account_session acs ON a.id = acs.account_id
-JOIN session_params sp ON acs.ga_session_id = sp.ga_session_id
-WHERE a.is_unsubscribed = 1
-GROUP BY sp.country
-ORDER BY sent_cnt DESC;
+-- 3. Product Quantity by Category Group
+SELECT
+  CASE
+    WHEN position('furniture' in category) > 0 THEN 'furniture'
+    WHEN position('units' in category) > 0 THEN 'units'
+    ELSE 'other'
+  END AS category_group,
+  COUNT(*) AS quantity
+FROM products
+GROUP BY category_group;
+
+-- 4. Extract Size from Product Description
+SELECT
+  short_description,
+  CASE
+    WHEN position('x' in short_description) > 0 AND position('cm' in short_description) > 0
+    THEN SUBSTRING(short_description FROM position('x' in short_description) + 1 FOR length(short_description))
+    ELSE NULL
+  END AS size
+FROM products;

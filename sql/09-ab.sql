@@ -152,4 +152,5 @@ SELECT date,
        test_group,
        'new account'   AS event_name,
        new_account_cnt AS value
-FROM account;
+FROM account
+order by date, country, device, event_name;

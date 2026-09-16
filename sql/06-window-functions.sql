@@ -118,20 +118,7 @@ JOIN orders o ON p.item_id = o.item_id
 GROUP BY p.category
 ORDER BY revenue DESC;
 
--- 8. Product Price vs Category Average (JOIN + window)
-SELECT
-    p.name,
-    p.category,
-    p.price,
-    cat_avg.avg_price_in_category
-FROM products p
-JOIN (
-    SELECT category, AVG(price) AS avg_price_in_category
-    FROM products
-    GROUP BY category
-) cat_avg ON p.category = cat_avg.category;
-
--- 9. Product Price vs Category Average (Window function)
+-- 8. Product Price vs Category Average (Window function)
 SELECT
     name,
     category,
@@ -139,7 +126,7 @@ SELECT
     AVG(price) OVER (PARTITION BY category) AS avg_price_in_category
 FROM products;
 
--- 10. Product Ranking by Price in Category
+-- 9. Product Ranking by Price in Category
 SELECT
     name,
     category,
@@ -147,7 +134,7 @@ SELECT
     ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) AS price_rank
 FROM products;
 
--- 11. Account Rank by Email Count
+-- 10. Account Rank by Email Count
 SELECT
     id_account AS account_id,
     COUNT(id_message) AS total_emails,
@@ -156,34 +143,12 @@ FROM email_sent
 GROUP BY id_account
 ORDER BY account_rank;
 
--- 12. Top 10 Sent Days per Account
-SELECT account_id, sent_date, sent_day_rank
-FROM (
-    SELECT
-        id_account AS account_id,
-        sent_date,
-        DENSE_RANK() OVER (PARTITION BY id_account ORDER BY sent_date DESC) AS sent_day_rank
-    FROM (
-        SELECT DISTINCT
-            es.id_account,
-            (s.date + (es.sent_date || ' days')::interval) AS sent_date
-        FROM email_sent es
-        JOIN account_session acs ON acs.account_id = es.id_account
-        JOIN sessions s ON s.ga_session_id = acs.ga_session_id
-    ) AS unique_days
-) ranked
-WHERE sent_day_rank <= 10
-ORDER BY account_id, sent_day_rank;
-
--- 13. Continents and countries
+-- 11. Continents and countries
 SELECT
     continent,
     country,
     COUNT(*) AS session_count,
-    ROW_NUMBER() OVER (
-        PARTITION BY continent
-        ORDER BY country
-        ) AS country_number
+    ROW_NUMBER() OVER (PARTITION BY continent ORDER BY country) AS country_number
 FROM session_params
 GROUP BY continent, country
 ORDER BY continent, country;
