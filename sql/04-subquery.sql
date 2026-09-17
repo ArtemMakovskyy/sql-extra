@@ -1,4 +1,0 @@
--- Subqueries overview
--- See also: 04_1-subquery_select.sql, 04_2-subquery_from.sql,
---           04_3-subquery_where.sql, 04_4-subquery_having.sql,
---           04_5-subquery_join.sql

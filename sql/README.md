@@ -1,4 +1,4 @@
-# SQL Queries — 23 files
+# SQL Queries — 22 files
 
 A collection of SQL queries demonstrating various constructs and approaches.
 
@@ -11,7 +11,6 @@ From basic constructs to more complex — progression of difficulty:
 | [`01-basic.sql`](01-basic.sql) | Basic SELECT, JOIN, aggregation | `JOIN`, `GROUP BY`, `HAVING`, `COUNT`, `LIMIT` |
 | [`02-case-when.sql`](02-case-when.sql) | CASE WHEN conditions | `CASE`, `WHEN`, `THEN`, `ELSE`, `END`, conditional aggregation |
 | [`03-union.sql`](03-union.sql) | UNION / UNION ALL | `UNION ALL`, combining results from different queries |
-| [`04-subquery.sql`](04-subquery.sql) | Subqueries (overview) | See subfiles 04_1–04_5 |
 | [`04_1-subquery_select.sql`](04_1-subquery_select.sql) | Subquery in SELECT | Scalar subqueries in SELECT |
 | [`04_2-subquery_from.sql`](04_2-subquery_from.sql) | Subquery in FROM | Derived tables, subqueries as source |
 | [`04_3-subquery_where.sql`](04_3-subquery_where.sql) | Subquery in WHERE | `IN`, `EXISTS`, comparison with subquery |
