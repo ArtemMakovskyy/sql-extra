@@ -162,12 +162,18 @@ All tasks are located in the [../sql/](../sql/) folder ([README](../sql/README.m
 | [`01-basic.sql`](../sql/01-basic.sql) | Basic SELECT, JOIN, aggregation |
 | [`02-case-when.sql`](../sql/02-case-when.sql) | CASE WHEN conditions |
 | [`03-union.sql`](../sql/03-union.sql) | UNION / UNION ALL |
-| [`04-subquery.sql`](../sql/04-subquery.sql) | Subqueries |
+| [`04_1-subquery_select.sql`](../sql/04_1-subquery_select.sql) | Subquery in SELECT |
+| [`04_2-subquery_from.sql`](../sql/04_2-subquery_from.sql) | Subquery in FROM |
+| [`04_3-subquery_where.sql`](../sql/04_3-subquery_where.sql) | Subquery in WHERE |
+| [`04_4-subquery_having.sql`](../sql/04_4-subquery_having.sql) | Subquery in HAVING |
+| [`04_5-subquery_join.sql`](../sql/04_5-subquery_join.sql) | Subquery in JOIN |
 | [`05-data.sql`](../sql/05-data.sql) | Working with dates and intervals |
 | [`06-window-functions.sql`](../sql/06-window-functions.sql) | Window functions |
+| [`06_0-window-functions-overview.sql`](../sql/06_0-window-functions-overview.sql) | Window functions overview |
 | [`07-cte.sql`](../sql/07-cte.sql) | Common Table Expressions (WITH) |
 | [`08_1-view.sql`](../sql/08_1-view.sql) | Views (VIEW) |
 | [`08_2-temp.sql`](../sql/08_2-temp.sql) | Temporary tables |
+| [`09-ab.sql`](../sql/09-ab.sql) | A/B testing analysis |
 | [`analytics.sql`](../sql/analytics.sql) | Analytical queries |
 | [`email-funnel.sql`](../sql/email-funnel.sql) | Email funnel |
 | [`orders.sql`](../sql/orders.sql) | Order-related queries |

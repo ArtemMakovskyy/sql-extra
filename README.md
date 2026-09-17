@@ -6,7 +6,7 @@
 ![Docker](https://img.shields.io/badge/Docker-compose-2496ED)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-A practical project for demonstrating SQL, PostgreSQL, and Spring Boot skills. Simulates web analytics data: user sessions, events, A/B tests, email funnel, and orders. Contains 15+ SQL files, REST API, test data generation, and Docker infrastructure.
+A practical project for demonstrating SQL, PostgreSQL, and Spring Boot skills. Simulates web analytics data: user sessions, events, A/B tests, email funnel, and orders. Contains 22 SQL files, REST API, test data generation, and Docker infrastructure.
 
 Data is automatically generated on first startup so you can start writing queries immediately.
 
@@ -29,7 +29,7 @@ Data is automatically generated on first startup so you can start writing querie
 | # | Demonstrates |
 |---|---|
 | 1 | **DB Design** — 13 tables, normalization, 1:1, 1:M, M:N relationships |
-| 2 | **SQL Queries** — 15 files: JOIN, CASE WHEN, UNION, subqueries, window functions, CTE, VIEW |
+| 2 | **SQL Queries** — 22 files: JOIN, CASE WHEN, UNION, subqueries, window functions, CTE, VIEW |
 | 3 | **REST API** — CRUD for all entities (Spring Boot + JPA + MapStruct) |
 | 4 | **Data Generation** — DataFaker, realistic scenarios (email funnel, A/B tests, web analytics) |
 | 5 | **DDL Migrations** — Liquibase, 13 files |

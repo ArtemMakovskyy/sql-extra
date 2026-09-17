@@ -5,7 +5,7 @@
 | Folder | Contents |
 |---|---|
 | [`http/`](../http/) | HTTP requests for testing REST API (JetBrains HTTP Client) |
-| [`sql/`](../sql/) | SQL queries to run — 15 files |
+| [`sql/`](../sql/) | SQL queries to run — 22 files |
 | `src/main/java/.../controller/` | REST controllers (13 files) |
 | `src/main/java/.../entity/` | JPA entities (13 tables) |
 | `src/main/java/.../repository/` | Spring Data JPA repositories |
