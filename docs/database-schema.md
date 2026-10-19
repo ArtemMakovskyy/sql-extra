@@ -110,8 +110,8 @@ erDiagram
 | **account** | Subscribers who left their email. |
 | **account_session** | Junction table between account and session. |
 | **email_sent** | All sent emails. `sent_date` — number of days after account creation. |
-| **email_open** | Each email open event. |
-| **email_visit** | Each email click event. |
+| **email_open** | Each email open event. `open_date` — number of days after account creation. |
+| **email_visit** | Each email click event. `visit_date` — number of days after account creation. |
 | **order** | Purchases. Each row = one product bought in a session. |
 | **product** | Product catalog: name, category, price. |
 | **revenue_predict** | Company revenue plan by date. |
@@ -174,8 +174,11 @@ All tasks are located in the [../sql/](../sql/) folder ([README](../sql/README.m
 | [`08_1-view.sql`](../sql/08_1-view.sql) | Views (VIEW) |
 | [`08_2-temp.sql`](../sql/08_2-temp.sql) | Temporary tables |
 | [`09-ab.sql`](../sql/09-ab.sql) | A/B testing analysis |
+| [`10-cohort-analysis.sql`](../sql/10-cohort-analysis.sql) | Cohort analysis: email-visit retention by account signup week |
 | [`analytics.sql`](../sql/analytics.sql) | Analytical queries |
 | [`email-funnel.sql`](../sql/email-funnel.sql) | Email funnel |
 | [`orders.sql`](../sql/orders.sql) | Order-related queries |
 | [`products.sql`](../sql/products.sql) | Product-related queries |
 | [`sessions.sql`](../sql/sessions.sql) | Session-related queries |
+| [`extra.sql`](../sql/extra.sql) | Combined query joining all 13 tables |
+| [`temp.sql`](../sql/temp.sql) | Email funnel detail: sent → open → visit per message |

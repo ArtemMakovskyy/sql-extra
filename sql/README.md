@@ -41,3 +41,5 @@ Real-world web analytics scenarios:
 | File | Description |
 |---|---|
 | [`09-ab.sql`](09-ab.sql) | A/B testing analysis: sessions, events, orders, new accounts by test groups |
+| [`extra.sql`](extra.sql) | Combined query joining all 13 tables via pre-aggregated CTEs |
+| [`temp.sql`](temp.sql) | Email funnel detail: sent → open → visit per message with account sessions |
