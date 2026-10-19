@@ -1,4 +1,4 @@
-# SQL Queries — 22 files
+# SQL Queries — 23 files
 
 A collection of SQL queries demonstrating various constructs and approaches.
 
@@ -34,6 +34,7 @@ Real-world web analytics scenarios:
 | [`orders.sql`](orders.sql) | Orders count by product, revenue by product, orders by session |
 | [`products.sql`](products.sql) | All products, filter by category, price range, top expensive |
 | [`sessions.sql`](sessions.sql) | All sessions, filter by date, join with session_params |
+| [`10-cohort-analysis.sql`](10-cohort-analysis.sql) | Cohort analysis: email-visit retention by account signup week |
 
 ## Other
 

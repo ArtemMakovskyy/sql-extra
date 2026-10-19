@@ -10,34 +10,43 @@ GROUP BY acc.id
 ORDER BY first_sent_date;
 
 -- 2. Emails Sent by Month with Metrics
-SELECT DISTINCT
+WITH account_start_dates AS (
+    SELECT
+        acs.account_id,
+        MIN(s.date) AS min_date
+    FROM account_session acs
+             JOIN sessions s ON s.ga_session_id = acs.ga_session_id
+    GROUP BY acs.account_id
+),
+     base_dates AS (
+         SELECT
+             es.id_account,
+             (acc_start.min_date + (es.sent_date || ' days')::interval) AS sent_date,
+             DATE_TRUNC('month', acc_start.min_date + (es.sent_date || ' days')::interval) AS sent_month
+         FROM email_sent es
+                  JOIN account_start_dates acc_start ON acc_start.account_id = es.id_account
+     ),
+     account_monthly_stats AS (
+         SELECT
+             sent_month,
+             id_account,
+             COUNT(*) AS account_msg_count,
+             MIN(sent_date) AS first_sent_date,
+             MAX(sent_date) AS last_sent_date
+         FROM base_dates
+         GROUP BY sent_month, id_account
+     )
+SELECT
     sent_month,
     id_account,
-    COUNT(*) OVER (PARTITION BY sent_month, id_account)
-        / NULLIF(COUNT(*) OVER (PARTITION BY sent_month), 0) * 100 AS sent_msg_percent_from_this_month,
-    MIN(sent_date) OVER (PARTITION BY sent_month, id_account) AS first_sent_date,
-    MAX(sent_date) OVER (PARTITION BY sent_month, id_account) AS last_sent_date
-FROM (
-    SELECT
-        es.id_account,
-        (acc_start.min_date + (es.sent_date || ' days')::interval) AS sent_date,
-        DATE_TRUNC('month', acc_start.min_date + (es.sent_date || ' days')::interval) AS sent_month
-    FROM email_sent es
-    JOIN (
-        SELECT
-            acs.account_id,
-            MIN(s.date) AS min_date
-        FROM account_session acs
-        JOIN sessions s ON s.ga_session_id = acs.ga_session_id
-        GROUP BY acs.account_id
-    ) acc_start ON acc_start.account_id = es.id_account
-) db
+    account_msg_count * 100.0 / NULLIF(SUM(account_msg_count) OVER (PARTITION BY sent_month), 0) AS sent_msg_percent_from_this_month,
+    first_sent_date,
+    last_sent_date
+FROM account_monthly_stats
 ORDER BY sent_month, id_account;
 
 -- 3. Top 3 Categories by Revenue per Country
-SELECT country, category, revenue, total_country_revenue, row_num,
-    ROUND(revenue / NULLIF(total_country_revenue, 0) * 100, 2) AS c_r_p
-FROM (
+WITH category_revenue AS (
     SELECT
         sp.country,
         p.category,
@@ -45,13 +54,45 @@ FROM (
         SUM(SUM(p.price)) OVER (PARTITION BY sp.country) AS total_country_revenue,
         ROW_NUMBER() OVER (PARTITION BY sp.country ORDER BY SUM(p.price) DESC) AS row_num
     FROM session_params sp
-    JOIN orders o ON sp.ga_session_id = o.ga_session_id
-    JOIN products p ON o.item_id = p.item_id
+             JOIN orders o ON sp.ga_session_id = o.ga_session_id
+             JOIN products p ON o.item_id = p.item_id
     GROUP BY sp.country, p.category
-) row_numbers
+)
+SELECT
+    country,
+    category,
+    revenue,
+    total_country_revenue,
+    row_num,
+    ROUND(revenue / NULLIF(total_country_revenue, 0) * 100, 2) AS c_r_p
+FROM category_revenue
 WHERE row_num <= 3;
 
 -- 4. Revenue and Cost with Running Totals by Month
+WITH orders_revenue AS (
+    SELECT
+        DATE_TRUNC('month', s.date) AS month_date,
+        s.date,
+        SUM(p.price) AS revenue,
+        0 AS cost
+    FROM orders o
+             JOIN products p ON o.item_id = p.item_id
+             JOIN sessions s ON o.ga_session_id = s.ga_session_id
+    GROUP BY s.date
+),
+     paid_cost AS (
+         SELECT
+             DATE_TRUNC('month', date) AS month_date,
+             date,
+             0 AS revenue,
+             cost
+         FROM paid_search_cost
+     ),
+     combined_data AS (
+         SELECT * FROM orders_revenue
+         UNION ALL
+         SELECT * FROM paid_cost
+     )
 SELECT
     month_date,
     date,
@@ -60,24 +101,7 @@ SELECT
     SUM(revenue) OVER (PARTITION BY month_date ORDER BY date) AS acc_revenue,
     SUM(revenue) OVER (PARTITION BY month_date) AS total_month_revenue,
     SUM(cost) OVER (PARTITION BY month_date ORDER BY date) AS acc_cost
-FROM (
-    SELECT
-        DATE_TRUNC('month', s.date) AS month_date,
-        s.date,
-        SUM(p.price) AS revenue,
-        0 AS cost
-    FROM orders o
-    JOIN products p ON o.item_id = p.item_id
-    JOIN sessions s ON o.ga_session_id = s.ga_session_id
-    GROUP BY s.date
-    UNION ALL
-    SELECT
-        DATE_TRUNC('month', date) AS month_date,
-        date,
-        0 AS revenue,
-        cost
-    FROM paid_search_cost
-) combined_data
+FROM combined_data
 ORDER BY date;
 
 -- 5. First Event by Session (row_number)
